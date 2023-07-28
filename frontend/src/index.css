@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap');
+:root {
+  margin:0;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Titillium Web', sans-serif !important;
+}
+
+
+body {
+  margin: 0;
+}
+/* login page */
+/* minimum/no usage of border radius */
+/* dark blue, white, a little use of golder/yellow(not a lot of use) */
