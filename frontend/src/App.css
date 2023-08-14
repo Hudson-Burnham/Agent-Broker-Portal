@@ -2,3 +2,8 @@
 ::-webkit-scrollbar {
     display: none;
   }
+  .message-contact-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }

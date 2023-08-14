@@ -4,15 +4,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import TextInput from "../Form/TextInput";
-import { Mail, Person, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Form from "../Form/Form";
-import { AlertBox, Container, LightFilledButton, LoginBox } from "./SignIn";
+import { AlertBox, Container, MainButton, LoginBox, SecondaryButton } from "./SignIn";
 
 interface Props {
   handleLogin: () => void;
 }
 type FormProps = {
-  username: string;
+  name: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -22,33 +22,34 @@ export default function SignUp(props: Props) {
   const [showPassword, handleShowPassword] = useState(false);
   const [showConfirmPassword, handleConfirmPassword] = useState(false);
 
-
   const defaultValues = {
-    username: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
   };
   const LoginSchema = Yup.object().shape({
-    username: Yup.string().required("Please enter your username"),
-    email: Yup.string().email().required("Please enter your email"),
-    password: Yup.string().required("Please enter your password").matches(
-      /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-      "Password must contain at least 8 characters, one uppercase, one number and one special case character"
-    ),
-    confirmPassword: Yup.string().required("Please confirm your password").oneOf([Yup.ref('password')], "Passwords don't match."),
+    name: Yup.string().trim().required("Name is required"),
+    email: Yup.string().trim().email().required("Email is required"),
+    password: Yup.string().trim()
+      .required("Password is required")
+      .matches(
+        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+        "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+      ),
+    confirmPassword: Yup.string().trim()
+      .required("Password confirmation is required")
+      .oneOf([Yup.ref("password")], "Passwords don't match."),
   });
   const methods = useForm<FormProps>({
     resolver: yupResolver(LoginSchema),
     defaultValues,
   });
-
   const { reset, handleSubmit } = methods;
-
   const onSubmit = (data: FormProps) => {
     console.log(data);
     try {
-      props.handleLogin()
+      props.handleLogin();
     } catch (error) {
       console.log("error");
       reset();
@@ -59,31 +60,27 @@ export default function SignUp(props: Props) {
     <Container>
       <AlertBox></AlertBox>
       <LoginBox>
-        <Typography variant="h4" fontWeight={600} mb={2} color="#1B1C1D">
-          Get Started
+      <Typography variant="h5" fontWeight={800} mb={0.5} align="left">
+          Create an account
+        </Typography>
+        <Typography variant="subtitle1" mb={3} align="left">
+          Let's Get Started!
         </Typography>
         <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <TextInput
-            name="username"
-            placeholder="Enter your username"
-            endAdornment={
-              <InputAdornment position="end">
-                <Person />
-              </InputAdornment>
-            }
+            name="name"
+            placeholder="Enter your name"
+            label="Name"
           />
           <TextInput
             name="email"
             type="email"
+            label="Email"
             placeholder="Enter your email"
-            endAdornment={
-              <InputAdornment position="end">
-                <Mail />
-              </InputAdornment>
-            }
           />
           <TextInput
             name="password"
+            label="Password"
             placeholder="Enter your password"
             type={showPassword ? "text" : "password"}
             endAdornment={
@@ -92,13 +89,14 @@ export default function SignUp(props: Props) {
                   sx={{ p: 0 }}
                   onClick={() => handleShowPassword((val) => !val)}
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {showPassword ? <VisibilityOff style={{color: 'white'}} /> : <Visibility style={{color: 'white'}} />}
                 </IconButton>
               </InputAdornment>
             }
           />
           <TextInput
             name="confirmPassword"
+            label="Confirm Password"
             placeholder="Re Enter your password"
             type={showConfirmPassword ? "text" : "password"}
             endAdornment={
@@ -107,32 +105,30 @@ export default function SignUp(props: Props) {
                   sx={{ p: 0 }}
                   onClick={() => handleConfirmPassword((val) => !val)}
                 >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  {showConfirmPassword ? <VisibilityOff style={{color: 'white'}} /> : <Visibility style={{color: 'white'}} />}
                 </IconButton>
               </InputAdornment>
             }
           />
 
-          <LightFilledButton variant="contained" type="submit">
+          <MainButton variant="contained" type="submit">
             Sign Up
-          </LightFilledButton>
+          </MainButton>
+          <SecondaryButton variant="contained" style={{marginTop: 16}}>
+            Continue with email
+          </SecondaryButton>
         </Form>
 
-        <Typography variant="body1" mt={4}>
+        <Typography variant="body2" mt={2}>
           Already have an account ?{" "}
           <a
-            style={{ fontWeight: 700, color: "#131E32", cursor: "pointer" }}
+            style={{ fontWeight: 700, textDecoration: 'underline', cursor: "pointer" }}
             onClick={props.handleLogin}
           >
-            Login
+            Log in
           </a>
         </Typography>
 
-        <Typography fontSize={10} mt={2}>
-          By creating an account, you are agreeing to our Terms of Service and
-          Privacy Policy. You also agree to receive product-related marketing
-          emails from Writesonic, which you can unsubscribe from at any time.
-        </Typography>
       </LoginBox>
     </Container>
   );

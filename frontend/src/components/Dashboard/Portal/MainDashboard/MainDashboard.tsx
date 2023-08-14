@@ -1,40 +1,46 @@
 import { Message, Notifications, Search } from "@mui/icons-material";
 import { IconButton, InputAdornment, TextField, styled } from "@mui/material";
+import Profile from "./Profile";
 
-const Box = styled("div")({
-  margin: "0 350px 0 225px",
-  width: "100%",
-  height: "100vh",
-  padding: "28px 36px",
+const Dashboard = styled("div")({
+  display: 'flex',
+  gap: '24px'
 });
+const Content = styled('div')({
+  padding: '20px 12px',
+  flex: 1
+})
 const Header = styled("div")({
   display: "flex",
-  gap: '8px'
+  gap: "8px",
 });
-const SearchComponent = styled(TextField)({
-  border: "1px solid #131E3244",
-  borderRadius: "12px",
+export const SearchComponent = styled(TextField)({
+  border: "1px solid #5b66a9",
+  borderRadius: "24px",
   "& input": {
-    padding: "12px 6px",
+    padding: "8px 6px",
+    color: "white",
   },
   "& fieldset": {
     display: "none",
   },
 });
 const HeaderIcon = styled(IconButton)({
-    borderRadius: '8px',
-    border: '1px solid #131E3244'
-})
+  borderRadius: "8px",
+  border: "1px solid #5b66a9",
+});
 
-export default function Portal() {
+function MainDashboard() {
   return (
-    <Box>
+    <Dashboard>
+      <Content>
+
       <Header>
         <SearchComponent
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Search />
+                <Search style={{ color: "#5b66a9" }} />
               </InputAdornment>
             ),
           }}
@@ -42,12 +48,17 @@ export default function Portal() {
           placeholder="Search here ..."
         />
         <HeaderIcon>
-            <Notifications />
+          <Notifications style={{ color: "#5b66a9" }} />
         </HeaderIcon>
         <HeaderIcon>
-            <Message />
+          <Message style={{ color: "#5b66a9" }} />
         </HeaderIcon>
       </Header>
-    </Box>
+      </Content>
+
+      <Profile />
+    </Dashboard>
   );
 }
+
+export default MainDashboard;

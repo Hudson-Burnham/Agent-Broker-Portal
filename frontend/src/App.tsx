@@ -3,16 +3,18 @@ import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import { FC, ReactNode, useState } from "react";
+import { useSelector } from "react-redux";
 
 interface GuardProps {
   children: ReactNode;
-  auth: boolean
 }
 
 const AuthGuard: FC<GuardProps> = (props) => {
   const location = useLocation();
+  const auth = useSelector((state: State) => state.isUserLoggedIn);
+
   const [requestedLocation, setLocation] = useState<string | null>(null);
-  if (!props.auth) {
+  if (!auth) {
     if (location.pathname !== requestedLocation) {
       setLocation(location.pathname);
     }
@@ -27,25 +29,21 @@ const AuthGuard: FC<GuardProps> = (props) => {
 };
 
 const GuestGuard: FC<GuardProps> = (props) => {
-  if (props.auth) {
+  const auth = useSelector((state: State) => state.isUserLoggedIn);
+  if (auth) {
     return <Navigate to="/" />;
   }
   return <>{props.children}</>;
 };
 
 function App() {
-const [auth, setAuth] = useState(false)
-const handleAuth = () => {
-  setAuth(() => true)
-}
-
   return (
     <>
       <Routes>
         <Route
           path="/"
           element={
-            <AuthGuard auth={auth}>
+            <AuthGuard>
               <Dashboard />
             </AuthGuard>
           }
@@ -53,8 +51,8 @@ const handleAuth = () => {
         <Route
           path="/auth/login"
           element={
-            <GuestGuard auth={auth}>
-              <Login setAuth={handleAuth} />
+            <GuestGuard>
+              <Login />
             </GuestGuard>
           }
         />
