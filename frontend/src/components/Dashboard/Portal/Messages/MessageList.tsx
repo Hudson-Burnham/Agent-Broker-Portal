@@ -1,12 +1,13 @@
 import { Send } from "@mui/icons-material";
 import { IconButton, TextField, styled } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { sendMessage } from "../../../../axios";
 import { useSelector } from "react-redux";
 import MessageItem from "./MessageItem";
 
 const MessageSection = styled("div")({
-  background: "#808dd6",
+  // background: "#808dd6",
+  background: '#abb6f8',
   display: "flex",
   flexDirection: "column",
   flex: 1,
@@ -44,6 +45,11 @@ type Props = {
 function MessageList(props: Props) {
   const [message, setMessage] = useState("");
   const user: User = useSelector((state: State) => state.user) as User;
+  const messageRef = useRef<HTMLDivElement>()
+
+  useEffect(() => {
+    messageRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'})
+  },[props.messages])
 
   const handleSendMessage = async () => {
     if (message.length > 0) {
@@ -53,12 +59,12 @@ function MessageList(props: Props) {
         sender: user,
         text: message
       }
+      props.handleMessageList(newMessage)
       await sendMessage({
         chatId: props.chat._id,
         sender: user._id,
         text: message,
       }).then((res) => {
-      props.handleMessageList(newMessage)
       console.log(res)
       });
     }
@@ -69,6 +75,7 @@ function MessageList(props: Props) {
         {props.messages.map((message, idx) => (
           <MessageItem key={idx} text={message.text} isUser={message.sender._id === user._id}  />
         ))}
+        <div ref={(el) => (messageRef.current = el as HTMLDivElement)}></div>
       </ListSection>
       <MessageForm>
         <Input
@@ -85,4 +92,3 @@ function MessageList(props: Props) {
   );
 }
 export default MessageList;
-//append the messages list with new message
