@@ -13,7 +13,7 @@ export async function loginRequest(data: {
   });
 }
 export async function registerUserRequest(data: {
-  username: string;
+  name: string;
   email: string;
   password: string;
 }): Promise<AxiosResponse<any>> {
