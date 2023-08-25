@@ -1,6 +1,7 @@
 import { Message, Notifications, Search } from "@mui/icons-material";
 import { IconButton, InputAdornment, TextField, styled } from "@mui/material";
 import Profile from "./Profile";
+import { useSelector } from "react-redux";
 
 const Dashboard = styled("div")({
   display: 'flex',
@@ -19,7 +20,7 @@ export const SearchComponent = styled(TextField)({
   borderRadius: "24px",
   "& input": {
     padding: "8px 6px",
-    color: "white",
+    color: "#808dd6",
   },
   "& fieldset": {
     display: "none",
@@ -31,6 +32,7 @@ const HeaderIcon = styled(IconButton)({
 });
 
 function MainDashboard() {
+  const user: User = useSelector((state: State) => state.user) as User
   return (
     <Dashboard>
       <Content>
@@ -56,7 +58,7 @@ function MainDashboard() {
       </Header>
       </Content>
 
-      <Profile />
+      <Profile name={user.name} profileImage={user.profileImage} user />
     </Dashboard>
   );
 }

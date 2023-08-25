@@ -62,15 +62,11 @@ export async function fetchChatMessage(data: {
     })
 }
 
-export async function sendMessage(data: {
-    sender: string;
-    text: string;
-    chatId: string
-}): Promise<AxiosResponse<any>> {
+export async function sendMessage(data: FormData): Promise<AxiosResponse<any>> {
     return await axios({
         method: 'post',
         url: 'messages',
-        data: data
+        data: data,
     })
 }
 

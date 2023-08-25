@@ -10,6 +10,7 @@ import { useState } from "react";
 import { loginRequest } from "../../axios";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/action";
+import img from "../../profileImg.png"
 
 export const Container = styled("div")({
   display: "flex",
@@ -93,7 +94,13 @@ function SignIn(props: Props) {
     try {
       await loginRequest(data)
         .then((res) => {
-          dispatch(login(res.data))
+          const user = {
+            _id: res.data._id,
+            name: res.data.name, 
+            email: res.data.email,
+            profileImage: img
+          }
+          dispatch(login(user))
         })
         .catch((err) => console.log("Login error: ", err));
     } catch (error) {

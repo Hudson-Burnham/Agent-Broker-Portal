@@ -6,7 +6,8 @@ import { SearchComponent } from "../MainDashboard/MainDashboard";
 import CreateChat from "./CreateChat";
 import { useSelector } from "react-redux";
 const ContactSection = styled("div")({
-  background: "#2f3b80",
+  // background: "#2f3b80",
+  background: "#1c1c38",
   color: "white",
   display: "flex",
   flexDirection: "column",
@@ -76,7 +77,6 @@ function Contacts(props: Props) {
   const [createChat, setCreateChat] = useState(false);
   const user: User = useSelector((state: State) => state.user) as User
  
-
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",

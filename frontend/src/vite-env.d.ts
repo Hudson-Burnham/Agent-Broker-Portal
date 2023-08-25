@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 type Message = {
     text: string;
+    attachment?: any[]
     sender: User;
     chatId: Chat
 }
@@ -25,4 +26,3 @@ type State = {
     type: string;
     payload: any;
   };
-  
