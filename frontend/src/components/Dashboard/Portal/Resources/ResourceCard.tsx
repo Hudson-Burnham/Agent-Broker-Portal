@@ -3,13 +3,14 @@ import { Typography, styled } from "@mui/material";
 import { resourcesData } from "../../../../utils/constants";
 
 const CardContainer = styled("div")({
-  display: "grid",
-  gridTemplateColumns: "repeat(4, 1fr)",
-  gap: "16px",
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: "32px",
+  marginBottom: '20px',
 });
 const Card = styled("div")({
-  border: "2px solid #5b66a9",
-  borderRadius: "16px",
+  background: '#ebeaea',
+  borderRadius: "8px",
 });
 const CardImg = styled("div")({
   height: "200px",
@@ -20,7 +21,7 @@ const CardImg = styled("div")({
 const CardBody = styled("div")({
   display: "flex",
   flexDirection: "column",
-  height: "180px",
+  height: "100px",
   borderRadius: "0 0 16px 16px",
   padding: "16px 10px",
 });
@@ -34,37 +35,35 @@ const FooterItems = styled("div")({
   display: "flex",
   gap: "4px",
   alignItems: "center",
-  fontSize: "10px",
+  fontSize: "12px",
 });
 function ResourceCard() {
   return (
     <CardContainer>
-     {resourcesData.map((item, i) => (
-          <Card key={i}>
-            <CardImg>
-              <img src={item.img} width="100%" height="100%" />
-            </CardImg>
-            <CardBody>
-              <Typography variant="subtitle1" fontWeight={600}>
-                {item.title}
-              </Typography>
-              <CardFooter>
-                <FooterItems>
-                  <Person fontSize="inherit" />
-
-                  <Typography fontSize="inherit">{item.author}</Typography>
-                </FooterItems>
-                <FooterItems>
-                  <LocalOffer fontSize="inherit" />
-
-                  <Typography fontSize="inherit">{item.category}</Typography>
-                </FooterItems>
-              </CardFooter>
-            </CardBody>
-          </Card>
-        ))}
+      {resourcesData.map((item, i) => (
+        <Card key={i}>
+          <CardImg>
+            <iframe src={item.url} height={"100%"} style={{borderRadius: '8px 8px 0 0 '}}></iframe>
+          </CardImg>
+          <CardBody>
+            <Typography variant="subtitle1" color={'#131E30'} fontWeight={600}>
+              {item.title}
+            </Typography>
+            <CardFooter>
+              <FooterItems>
+                <Person fontSize="inherit" style={{color: '#A29181'}} />
+                <Typography fontSize="inherit">{item.author}</Typography>
+              </FooterItems>
+              <FooterItems>
+                <LocalOffer fontSize="inherit" style={{color: '#A29181'}} />
+                <Typography fontSize="inherit">{item.category}</Typography>
+              </FooterItems>
+            </CardFooter>
+          </CardBody>
+        </Card>
+      ))}
     </CardContainer>
-  )
+  );
 }
 
-export default ResourceCard
+export default ResourceCard;

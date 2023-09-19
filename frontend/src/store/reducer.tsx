@@ -1,7 +1,7 @@
 import storage from "redux-persist/lib/storage";
 
 import { persistReducer } from "redux-persist";
-import { LOGIN, LOGOUT } from "./types";
+import { LOGIN, LOGOUT, SET_USER } from "./types";
 
 const initialState: State = {
   isUserLoggedIn: false,
@@ -26,6 +26,11 @@ function reducer(state: State = initialState, action: Action): State {
         ...state,
         isUserLoggedIn: !state.isUserLoggedIn,
         user: null
+    }
+    case SET_USER: 
+    return {
+      ...state,
+      user: action.payload
     }
     default:
       return state;

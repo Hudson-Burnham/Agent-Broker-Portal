@@ -13,9 +13,12 @@ type Chat = {
 }
 type User = {
     _id: string;
-    name: string;
+    username: string;
+    firstName?: string;
+    lastName?: string;
     email: string;
-    profileImage: string
+    profileImage: string;
+    firstLogin: any;
 }
 type State = {
     isUserLoggedIn: boolean;

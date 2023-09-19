@@ -24,10 +24,36 @@ export async function registerUserRequest(data: {
   });
 }
 
-export async function searchUsers(data: {user: string, userId: string}): Promise<AxiosResponse<any>> {
+export async function forgotPassword(data: {
+  email: string;
+}): Promise<AxiosResponse<any>> {
+  return await axios({
+    method: "post",
+    url: `user/forgot`,
+    data: data,
+  });
+}
+
+export async function editUser(data: FormData): Promise<AxiosResponse<any>> {
+  return await axios({
+    method: 'post',
+    url: `/user`,
+    data: data
+  })
+}
+
+export async function getUser(data: {userId: string}): Promise<AxiosResponse<any>> {
   return await axios({
     method: 'get',
-    url: `/user?searchUser=${data.user}&id=${data.userId}`
+    url: `/user/${data.userId}`
+  })
+}
+
+export async function searchUsers(data: {contactList: any[], userId: string}): Promise<AxiosResponse<any>> {
+  return await axios({
+    method: 'post',
+    url: `/user/search`,
+    data: data
   })
 } 
 
@@ -69,5 +95,10 @@ export async function sendMessage(data: FormData): Promise<AxiosResponse<any>> {
         data: data,
     })
 }
-
-
+export async function createPayment(): Promise<AxiosResponse<any>> {
+  return await axios({
+      method: 'post',
+      url: 'payment',
+      data: JSON.stringify({})
+  })
+}

@@ -7,6 +7,8 @@ type Props = {
   type?: string;
   placeholder: string;
   endAdornment?: JSX.Element;
+  disabled?: boolean
+  multiline?: boolean
 };
 
 export const Input = styled(TextField)({
@@ -14,6 +16,7 @@ export const Input = styled(TextField)({
   color: "white",
   ".MuiOutlinedInput-notchedOutline": {
     borderColor: "white !important",
+    borderRadius: "8px",
     ":hover": {
       borderColor: "white",
     },
@@ -21,6 +24,10 @@ export const Input = styled(TextField)({
       borderColor: "white",
     },
   },
+  "& .MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: "#A2918199 !important",
+  },
+  
   "& fieldset": {
     color: "white",
   },
@@ -29,7 +36,8 @@ export const Input = styled(TextField)({
 const Error = styled(Box)({
   minHeight: "24px",
   fontSize: "12px",
-  color: "red",
+  color: '#1c1c38',
+  // color: "red",
   textAlign: "left",
 });
 
@@ -55,7 +63,7 @@ export default function TextInput(props: Props) {
             }}
             inputProps={{
               style: {
-                padding: "12px 16px",
+                padding: props?.multiline ? '': "12px 16px",
                 fontSize: "18px",
                 color: "white",
               },
@@ -63,6 +71,10 @@ export default function TextInput(props: Props) {
             InputProps={{
               endAdornment: props?.endAdornment,
             }}
+            multiline={props?.multiline}
+            disabled={props?.disabled}
+            rows={4}
+            maxRows={4}
             {...field}
             error={!!error}
           />

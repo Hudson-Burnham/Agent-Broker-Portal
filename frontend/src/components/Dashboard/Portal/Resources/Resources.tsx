@@ -4,25 +4,24 @@ import { categoryData } from "../../../../utils/constants";
 import ResourceCard from "./ResourceCard";
 
 const ResourceBox = styled("div")({
-  color: "white",
   height: "100%",
   overflow: "auto",
   padding: '0 16px'
 });
 const Header = styled("div")({
   marginTop: '24px',
-  background: "#2c2c76",
-  color: "white",
+  background: "#131E30",
+  color: "#d5d5d5",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  border: "1px solid #5b66a9",
+  border: "1px solid pink",
   padding: "16px 20px",
-  borderRadius: "24px",
+  borderRadius: "8px",
 });
 const Line = styled("div")({
   height: "2px",
-  background: "#2c2c76",
+  background: "#131E3088",
   marginBottom: "16px",
 });
 const Category = styled("div")({
@@ -46,8 +45,9 @@ function Resources() {
       <Typography
         variant="subtitle2"
         fontWeight={600}
-        color={"white"}
-        mt={5}
+        color={'#131E30'}
+        pl={0.5}
+        mt={3}
         mb={1}
       >
         Categories
@@ -61,9 +61,9 @@ function Resources() {
             variant={`${category === item ? "filled" : "outlined"}`}
             onClick={() => setCategory(() => item)}
             sx={{
-              bgcolor: category === item ? "white" : "",
-              color: category === item ? "" : "white",
-              border: "1px solid white",
+              bgcolor: category === item ? "#A29181" : "#d5d5d555",
+              color: category === item ? "white" : "",
+              border: 'none',
             }}
           />
         ))}

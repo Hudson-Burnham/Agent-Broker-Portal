@@ -1,7 +1,6 @@
 import { Typography, styled } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+
+import { useSelector } from "react-redux";
 
 const Wrapper = styled("div")({
   height: "100vh",
@@ -10,15 +9,15 @@ const Wrapper = styled("div")({
   flexDirection: "column",
   alignItems: 'center',
   boxShadow: "8px 8px 20px #0e0e1d",
-  background: "#1c1c38",
+  background: "#131E30",
   overflowY: "auto",
-  padding: "42px 24px",
+  padding: "42px 20px",
   gap: "24px",
 });
 const ProfileBox = styled("div")({
-  padding: "16px 12px",
+  padding: "20px 12px",
   borderRadius: "8px",
-  border: "2px solid white",
+  boxShadow: "5px 5px 10px #0b121d, -5px -5px 10px #0b121d" ,
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -27,7 +26,7 @@ const ImgContainer = styled("div")({
   borderRadius: "100px",
   width: '100px',
   height: '100px',
-  background: "white",
+  background: "#A29181",
 });
 const Image = styled("img")({
   borderRadius: "100px",
@@ -43,48 +42,29 @@ const InfoContainer = styled("div")({
 const InfoBox = styled("div")({
   width: "100%",
   borderRadius: "8px",
-  border: "2px solid #5b66a9",
-  background: "#2f3b80",
+  background: "#A29181",
+  boxShadow: '5px 5px 10px #0e1724, -5px -5px 10px #0e1724',
   padding: "4px 2px",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
 });
-const Calendar = styled("div")({
-  width: "100%",
-  borderRadius: "24px",
-  background: "#2f3b80",
 
-  "& .MuiTypography-root": {
-    color: "white !important",
-  },
-  "& .MuiButtonBase-root": {
-    color: "white !important",
-  },
-});
-type Props = {
-  name: string;
-  profileImage: string;
-  email?: string;
-  user?: boolean;
-};
-export default function Profile(props: Props) {
+
+export default function Profile() {
+  const user: User = useSelector((state: State) => state.user) as User
   return (
-    <Wrapper style={{ width: props.user ? "350px" : "250px" }}>
-      {props.user ? (
+    <Wrapper>
         <Typography variant="h5" fontWeight={600} color="white">
-          Hi, Mr. {props.name} 👋
+          Hi, {user.username} 👋
         </Typography>
-      ) : (
-        ""
-      )}
-      {props.user ?
+     
         <ProfileBox>
         <ImgContainer>
-          <Image src={props.profileImage} />
+          <Image src={user.profileImage} />
         </ImgContainer>
         <Typography variant="h6" color="white" m={1}>
-          Mr. {props.name}
+         {user.firstName} {user.lastName}
         </Typography>
         <InfoContainer>
             <InfoBox>
@@ -96,7 +76,7 @@ export default function Profile(props: Props) {
               >
                 12/13
               </Typography>
-              <Typography variant="body2" color="#ffffff55" align="center">
+              <Typography variant="body2" color="#d5d5d5" align="center">
                 Closing Ratio
               </Typography>
             </InfoBox>
@@ -109,7 +89,7 @@ export default function Profile(props: Props) {
               >
                 8/10
               </Typography>
-              <Typography variant="body2" color="#ffffff55" align="center">
+              <Typography variant="body2" color="#d5d5d5" align="center">
                 Sales/Leases Ratio
               </Typography>
             </InfoBox>
@@ -122,31 +102,15 @@ export default function Profile(props: Props) {
               >
                 4/5
               </Typography>
-              <Typography variant="body2" color="#ffffff55">
+              <Typography variant="body2" color="#d5d5d5">
                 Trainings
               </Typography>
             </InfoBox>
           </InfoContainer>
-     
+  
       </ProfileBox>
-       : <>
-        <ImgContainer>
-          <Image src={props.profileImage} />
-        </ImgContainer>
-        <Typography variant="h6" color="white" m={1}>
-          Mr. {props.name}
-        </Typography>
-      </> }
-    
-      {props.user ? (
-        <Calendar>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar sx={{ color: "white" }} />
-          </LocalizationProvider>
-        </Calendar>
-      ) : (
-        ""
-      )}
+     
+       
     </Wrapper>
   );
 }

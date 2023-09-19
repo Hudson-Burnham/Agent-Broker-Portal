@@ -18,8 +18,8 @@ const AvatarBox = styled("div")({
 });
 const Avatar = styled("div")({
   background: "white",
-  height: "36px",
-  width: "36px",
+  height: "28px",
+  width: "28px",
   borderRadius: "50%",
 });
 const Doc = styled('div')({
@@ -32,6 +32,7 @@ const Doc = styled('div')({
 function MessageItem(props: Props) {
   const user : User = useSelector((state: State) => state.user) as User
   const attachment = props.attachment?.length ? props.attachment[0] : null;
+  console.log(props.attachment)
   let attachmentSrc = "";
   let name=""
   let type = "TEXT";
@@ -44,6 +45,7 @@ function MessageItem(props: Props) {
         )}`
       : URL.createObjectURL(attachment);
   }
+
 
   const renderAttachment = (type: string) => {
     switch (type) {
@@ -71,7 +73,7 @@ function MessageItem(props: Props) {
   };
 
   return (
-    <MessageBox>
+    <MessageBox style={{marginTop: (props.isUser === props.prevUser) ? '0px' : '16px'}}>
       <AvatarBox>
         {props.prevUser === props.isUser ? (
           ""

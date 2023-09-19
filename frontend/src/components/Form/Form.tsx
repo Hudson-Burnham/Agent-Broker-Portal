@@ -13,9 +13,3 @@ export default function Form({methods, children, onSubmit}: Props) {
     </FormProvider>
   )
 }
-//chat should be like discord chat
-//profile drawer
-//creata group chat
-//group chat functionalities
-//attachment in input form
-//error handling notification

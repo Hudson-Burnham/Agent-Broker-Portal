@@ -10,7 +10,7 @@ import { useState } from "react";
 import { loginRequest } from "../../axios";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/action";
-import img from "../../profileImg.png"
+import ChangePassword from "./ChangePassword";
 
 export const Container = styled("div")({
   display: "flex",
@@ -18,42 +18,40 @@ export const Container = styled("div")({
   width: "100%",
   alignItems: "center",
   textAlign: "center",
-  background: "#1c1c38",
-  boxShadow: "20px 20px 60px #0e0e1d",
+  boxShadow: "20px 20px 60px #c4c4c4",
   height: "100%",
   justifyContent: "center",
+  background: "#131E30",
+
 });
 export const AlertBox = styled("div")({
   minHeight: "80px",
 });
 export const LoginBox = styled("div")({
   maxWidth: "360px",
-  color: "white",
+  color:'#ffffff'
 });
 
 export const MainButton = styled(LoadingButton)({
   width: "100%",
-  background: "linear-gradient(145deg, #4646d3, #5353fa)",
-  boxShadow: "20px 20px 38px  #15152a, -20px -20px 38px  #232346",
-  padding: "8px 12px",
-  borderRadius: "24px",
   textTransform: "none",
+  color: 'white',
+  padding: '12px',
+  background: '#A29181',
   ":hover": {
-    background: "linear-gradient(145deg, #4646d3, #5353fa)",
-    boxShadow: "20px 20px 38px  #15152a, -20px -20px 38px  #232346",
+  background: '#A29181',
+  color: 'white'
   },
 });
 export const SecondaryButton = styled(LoadingButton)({
   width: "100%",
-  background: "white",
-  boxShadow: "20px 20px 38px  #15152a, -20px -20px 38px  #232346",
-  padding: "8px 12px",
-  borderRadius: "24px",
+  padding: '12px',
   textTransform: "none",
-  color: "#292A2B",
+  background: '#d5d5d5',
+  color: "#131E30",
   ":hover": {
-    background: "white",
-    boxShadow: "20px 20px 38px  #15152a, -20px -20px 38px  #232346",
+  background: '#d5d5d5',
+
   },
 });
 
@@ -66,8 +64,9 @@ type FormProps = {
   password: string;
 };
 function SignIn(props: Props) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [showPassword, handleShowPassword] = useState(false);
+  const [changePassword, setChangePassword] = useState(false);
 
   const defaultValues = {
     email: "",
@@ -96,11 +95,11 @@ function SignIn(props: Props) {
         .then((res) => {
           const user = {
             _id: res.data._id,
-            name: res.data.name, 
+            username: res.data.username,
             email: res.data.email,
-            profileImage: img
-          }
-          dispatch(login(user))
+            firstLogin: res.data.firstLogin
+          };
+          dispatch(login(user));
         })
         .catch((err) => console.log("Login error: ", err));
     } catch (error) {
@@ -112,68 +111,74 @@ function SignIn(props: Props) {
   return (
     <Container>
       <AlertBox></AlertBox>
-      <LoginBox>
-        <Typography variant="h5" fontWeight={800} mb={0.5} align="left">
-          Welcome Back
-        </Typography>
-        <Typography variant="subtitle1" mb={3} align="left">
-          Have we met before?
-        </Typography>
+      {changePassword ? (
+        <ChangePassword setValue={setChangePassword} />
+      ) : (
+        <LoginBox>
+          <Typography variant="h5" fontWeight={800} mb={0.5} align="left">
+            Welcome Back
+          </Typography>
+          <Typography variant="subtitle1" mb={3} align="left">
+            Have we met before?
+          </Typography>
 
-        <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <TextInput
-            name="email"
-            type="email"
-            label="Email"
-            placeholder="Enter your email"
-          />
-          <TextInput
-            name="password"
-            label="Password"
-            placeholder="Enter your password"
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  sx={{ p: 0 }}
-                  onClick={() => handleShowPassword((val) => !val)}
-                >
-                  {showPassword ? (
-                    <VisibilityOff style={{ color: "white" }} />
-                  ) : (
-                    <Visibility style={{ color: "white" }} />
-                  )}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-          <MainButton variant="contained" type="submit">
-            Log In
-          </MainButton>
-        </Form>
-        <Typography
-          variant="body2"
-          fontWeight={700}
-          style={{ cursor: "pointer" }}
-          mt={2}
-        >
-          Forgot your password ?
-        </Typography>
-
-        <Typography variant="body1" mt={4}>
-          New to our platform ?{" "}
-          <a
-            style={{
-              fontWeight: 700,
-              textDecoration: "underline",
-              cursor: "pointer",
-            }}
-            onClick={props.handleLogin}
+          <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
+            <TextInput
+              name="email"
+              type="email"
+              label="Email"
+              placeholder="Enter your email"
+            />
+            <TextInput
+              name="password"
+              label="Password"
+              placeholder="Enter your password"
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    sx={{ p: 0 }}
+                    onClick={() => handleShowPassword((val) => !val)}
+                  >
+                    {showPassword ? (
+                      <VisibilityOff style={{ color: "white" }} />
+                    ) : (
+                      <Visibility style={{ color: "white" }} />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            <MainButton variant="contained" type="submit">
+              Log In
+            </MainButton>
+          </Form>
+          <Typography
+            variant="body2"
+            fontWeight={700}
+            style={{ cursor: "pointer" }}
+            mt={2}
+            onClick={() => setChangePassword((prev) => !prev)}
           >
-            Sign Up
-          </a>
-        </Typography>
-      </LoginBox>
+            Forgot your password ?
+          </Typography>
+
+          <Typography variant="body1" mt={4} color={'#ffffff66'}>
+            New to our platform ?{" "}
+            <a
+              style={{
+                fontWeight: 700,
+                textDecoration: "underline",
+                cursor: "pointer",
+                color: '#ffffff'
+              }}
+              onClick={props.handleLogin}
+            >
+              Sign Up
+            </a>
+          </Typography>
+        </LoginBox>
+      )}
     </Container>
   );
 }

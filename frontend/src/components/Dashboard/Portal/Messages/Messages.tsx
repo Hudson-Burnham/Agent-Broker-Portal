@@ -1,9 +1,9 @@
-import { styled } from "@mui/material";
+import { CircularProgress, Typography, styled } from "@mui/material";
 import Contacts from "./Contacts";
 import MessageList from "./MessageList";
 import Profile from "./Profile";
 import { useEffect, useState } from "react";
-import NoConversation from "./NoConversation";
+import StartChat from "./StartChat";
 import { fetchAllChats, fetchChatMessage } from "../../../../axios";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
@@ -16,14 +16,23 @@ const MessageContainer = styled("div")({
   overflow: "auto",
 });
 
+const Loader = styled("div")({
+  background: "#808dd6",
+  color: "#1c1c3899",
+  display: "flex",
+  gap: "20px",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100%",
+});
+
 function Messages() {
+  const [Chat, setNewChat]: any = useState();
+  const [contactList, setcontactList]: any[] = useState();
   const [messageList, setMessageList]: any[] = useState([]);
-  const [chat, setChat]: any = useState();
-  const [chatList, setChatList]: any[] = useState([]);
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [showProfile, setShowProfile] = useState(false)
-  const [chatUsers, setChatUsers] = useState([])
+  const [loading, setLoading] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const user: User = useSelector((state: State) => state.user) as User;
   const socket = io("http://localhost:3000");
   useEffect(() => {
@@ -37,54 +46,46 @@ function Messages() {
 
   useEffect(() => {
     socket.on("receive message", (newMessage: Message) => {
-      console.log("message received via socket", newMessage, "is the new message")
       setMessageList((prev: Message[]) => [...prev, newMessage]);
+      fetchContact();
     });
   });
   const fetchMessages = async (_id: string, chat: Chat) => {
     await fetchChatMessage({ chatId: _id })
       .then((res) => {
-        setChat(chat);
+        setNewChat(chat);
         setMessageList(res.data);
+        setLoading(false);
       })
       .catch((error) =>
         console.log("error while fetching the messags of chat", error)
       );
   };
-  const handleChat = async (
-    _id: string,
-    name: string,
-    profileImage: string,
-    chat: any
-  ) => {
-    setName(name);
-    setImage(profileImage);
-    fetchMessages(_id, chat);
-    setChatUsers(chat.users)
-    setShowProfile(false)
-    socket.emit("join chat", _id);
+  const handleChat = async (chat: any, ChatProps: any) => {
+    console.log(chat)
+    if (Chat === undefined || ChatProps._id !== Chat._id) {
+      setMessageList([]);
+      setLoading(true);
+      fetchMessages(ChatProps._id, ChatProps);
+      setShowProfile(false);
+      socket.emit("join chat", ChatProps._id);
+    }
   };
-  const handleChatList = (newChat: any) => {
-    setChatList((prev: any) => [...prev, newChat]);
-    // newChat.users.find((newUser: User) => {
-    //   if (user._id !== newUser._id) {
-    //     console.log("Hi I am in handleChat list function")
-    //     handleChat(newUser._id, newUser.name, newUser.profileImage, newChat);
-    //   }
-    // });
+  const handlecontactList = (newChat: any) => {
+    setcontactList((prev: any) => [...prev, newChat]);
   };
   const handleMessageList = (newMessage: Message) => {
     setMessageList((prev: Message[]) => [...prev, newMessage]);
     socket.emit("send message", newMessage);
-  }; 
+  };
   const handleProfile = () => {
-    setShowProfile((prev) => !prev)
-  }
+    setShowProfile((prev) => !prev);
+  };
 
   const fetchContact = async () => {
     await fetchAllChats({ userId: user?._id })
       .then((res) => {
-        setChatList(() => res.data);
+        setcontactList(() => res.data);
       })
       .catch((error) =>
         console.log("got error while fetching contacts", error)
@@ -94,29 +95,59 @@ function Messages() {
   return (
     <MessageContainer>
       <Contacts
-        chatList={chatList}
-        handleChatList={handleChatList}
+        contactList={contactList}
+        handlecontactList={handlecontactList}
         handleChat={handleChat}
       />
       <div
         style={{ display: "flex", flexDirection: "column", overflow: "auto" }}
       >
-        {name.length ? (
-          <div style={{display: 'flex', height: '100%'}}>
-          <div style={{display: 'flex', flexDirection: 'column', flex: 1}}>
-          <Profile name={name} image={image} handleProfile={handleProfile} />
-            <MessageList
-              chat={chat}
-              handleMessageList={handleMessageList}
-              messages={messageList}
-            />
-          </div>
-           
-            {showProfile ? <ProfileDrawer info={chatUsers} handleProfile={handleProfile} /> : ''}
-          </div>
-        ) : (
-          <NoConversation />
-        )}
+        {Chat !== undefined ? (
+          loading ? (
+            <Loader>
+              <CircularProgress />
+              <Typography variant="h5" fontWeight={600}>
+                Loading Your Chats ...
+              </Typography>
+            </Loader>
+          ) : (
+            <div style={{ display: "flex", height: "100%" }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", flex: 1 }}
+              >
+                <Profile
+                  name={Chat.name}
+                  image={Chat.profileImage}
+                  handleProfile={handleProfile}
+                />
+                <MessageList
+                  chat={Chat}
+                  handleMessageList={handleMessageList}
+                  messages={messageList}
+                />
+              </div>
+
+              {showProfile ? (
+                <ProfileDrawer
+                  info={Chat.users}
+                  handleProfile={handleProfile}
+                />
+              ) : (
+                ""
+              )}
+            </div>
+          )
+        ) : ( loading ?
+            (<Loader>
+              <CircularProgress />
+              <Typography variant="h5" fontWeight={600}>
+                Loading Your Chats ...
+              </Typography>
+            </Loader>
+          )
+           : (
+          <StartChat />
+        ))}
       </div>
     </MessageContainer>
   );

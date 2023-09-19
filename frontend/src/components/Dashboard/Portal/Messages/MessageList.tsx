@@ -1,9 +1,7 @@
 import {
   AttachFile,
-  InsertDriveFileOutlined,
   Send,
   SentimentSatisfiedAlt,
-  ImageOutlined,
 } from "@mui/icons-material";
 import {
   IconButton,
@@ -18,6 +16,7 @@ import { useSelector } from "react-redux";
 import MessageItem from "./MessageItem";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import Preview from "./Preview";
+import { actionsList } from "../../../../utils/constants";
 
 const MessageSection = styled("div")({
   background: "#abb6f8",
@@ -29,10 +28,10 @@ const MessageSection = styled("div")({
 const ListSection = styled("div")({
   display: "flex",
   flexDirection: "column",
-  gap: "12px",
   flex: 1,
   overflow: "scroll",
   padding: "20px 16px",
+  paddingTop: 0
 });
 const MessageForm = styled("div")({
   position: "relative",
@@ -74,28 +73,15 @@ type Props = {
   handleMessageList: (message: Message) => void;
 };
 function MessageList(props: Props) {
-  const [message, setMessage] = useState("");
   const user: User = useSelector((state: State) => state.user) as User;
   const messageRef = useRef<HTMLDivElement>();
+  const [message, setMessage] = useState("");
   const [emojiPicker, setEmojiPicker] = useState(false);
   const [attachment, setAttachment] = useState(false);
   const [preview, setPreview] = useState(false);
   const [prevChat, setPrevChat]: any = useState(null);
   const [fileList, setFileList] = useState<FileList | null>(null);
-  const actionsList = [
-    {
-      id: "1",
-      text: "Photo/Video",
-      image: <ImageOutlined />,
-      accept: "image/*",
-    },
-    {
-      id: "2",
-      text: "File",
-      image: <InsertDriveFileOutlined />,
-      accept: ".pdf,.doc,.txt,application/msword,application/pdf,text/plain",
-    },
-  ];
+  
   const handleEmojiPicker = () => {
     setEmojiPicker((prev) => !prev);
   };
@@ -129,7 +115,7 @@ function MessageList(props: Props) {
       setPreview(false);
       const data = new FormData();
       const files = fileList ? [...fileList] : [];
-      (fileList ? [...fileList] : []).forEach((file) => {
+      files.forEach((file) => {
         data.append(`file`, file);
       });
 
@@ -152,7 +138,9 @@ function MessageList(props: Props) {
       };
       props.handleMessageList(newMessage);
       await sendMessage(data).then((res) => {
-        console.log("Message Sent");
+        if (res.status) {
+          console.log("Message Sent");
+        }
       });
     }
   };

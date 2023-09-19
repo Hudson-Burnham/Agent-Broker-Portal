@@ -1,13 +1,19 @@
-import { IconButton, InputAdornment, Typography, styled } from "@mui/material";
-import img from "../../../../profileImg.png";
-import { AddCircle, Search } from "@mui/icons-material";
-import { useState } from "react";
+import {
+  InputAdornment,
+  LinearProgress,
+  Typography,
+  styled,
+} from "@mui/material";
+import img from "../../../../assets/profileImg.png";
+import { Search } from "@mui/icons-material";
+import { useEffect, useState } from "react";
 import { SearchComponent } from "../MainDashboard/MainDashboard";
-import CreateChat from "./CreateChat";
+// import CreateChat from "./CreateChat";
 import { useSelector } from "react-redux";
+import OtherContacts from "./OtherContacts";
+
 const ContactSection = styled("div")({
-  // background: "#2f3b80",
-  background: "#1c1c38",
+  background: "#131E30",
   color: "white",
   display: "flex",
   flexDirection: "column",
@@ -19,64 +25,83 @@ const ContactForm = styled("div")({
   display: "grid",
   padding: "12px 32px",
   gridTemplateColumns: "repeat(2, 1fr)",
-  color: "#808dd6",
   ".active": {
-    background: "#808dd6",
+    background: "#A29181",
     boxShadow: "11px 11px 22px  #737fc1,,-11px -11px 22px #8d9beb",
-    color: "#2f3b80",
-    scale: "1.05",
+    scale: "1.1",
+    color: "#ffffff",
   },
 });
 const Item = styled("div")({
   padding: "9px 3px",
-  border: "2px solid #808dd6",
+  border: "1px solid #A29181",
+  color: "#ebeaea",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   textAlign: "center",
   cursor: "pointer",
 });
+const LoadingContainer = styled("div")({
+  display: "flex",
+  gap: "60px",
+  flexDirection: "column",
+  padding: "40px 60px",
+});
+const LoadingStack = styled(LinearProgress)({
+  "& .MuiLinearProgress-bar": {
+    backgroundColor: "#131E3099",
+  },
+});
 const ContactHeader = styled("div")({
   display: "flex",
   padding: "16px 20px",
   gap: "12px",
 });
-const ContactList = styled("div")({
+export const ContactList = styled("div")({
   display: "flex",
   flexDirection: "column",
   flex: 1,
   overflow: "scroll",
 });
-const ContactCard = styled("div")({
+export const ContactCard = styled("div")({
   padding: "16px 12px",
   display: "flex",
   gap: "16px",
   cursor: "pointer",
-  borderTop: "1px solid #808dd6",
-  borderBottom: "1px solid #808dd6",
+  borderTop: "1px solid #ebeaea",
+  borderBottom: "1px solid #ebeaea",
 });
-const ImgBox = styled("div")({
+export const ImgBox = styled("div")({
   background: "white",
   height: "40px",
   width: "40px",
   borderRadius: "100%",
 });
-const Img = styled("img")({
+export const Img = styled("img")({
   borderRadius: "100%",
   height: "100%",
   width: "100%",
 });
 
 type Props = {
-  chatList: any[];
-  handleChatList: (newChat: any) => void;
-  handleChat: (_id: string, name: string, profileImage: string, chat: Chat) => void;
+  contactList: any[];
+  handlecontactList: (newChat: any) => void;
+  handleChat: (chat: any, Chat: any) => void;
 };
 function Contacts(props: Props) {
+  const [loading, setLoading] = useState(true);
   const [val, setValue] = useState("1");
-  const [createChat, setCreateChat] = useState(false);
-  const user: User = useSelector((state: State) => state.user) as User
- 
+  console.log("contact list check",props.contactList)
+  // const [createChat, setCreateChat] = useState(false);
+  const user: User = useSelector((state: State) => state.user) as User;
+
+  useEffect(() => {
+    if (props.contactList) {
+      setLoading(false);
+    }
+  });
+
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -84,10 +109,24 @@ function Contacts(props: Props) {
       day: "numeric",
     });
   };
-  const handleChat = () => {
-    setCreateChat((prev) => !prev);
+  // const handleChat = () => {
+  //   setCreateChat((prev) => !prev);
+  // };
+  const handleUserDetails = (detail: string, chat: any) => {
+    switch (detail) {
+      case "NAME":
+        return chat.users[0]._id === user._id
+          ? chat.users[1].username
+          : chat.users[0].username;
+      case "IMG":
+        return chat.users[0]._id === user._id
+          ? chat.users[1].profileImage
+          : chat.users[0].profileImage;
+      default:
+        return "";
+    }
   };
-
+ 
   return (
     <ContactSection>
       <ContactForm>
@@ -95,7 +134,7 @@ function Contacts(props: Props) {
           className={`${val === "1" ? "active" : ""}`}
           onClick={() => setValue("1")}
         >
-          <Typography variant="subtitle2" fontWeight={600} color="inherit">
+          <Typography variant="subtitle2" fontWeight={500} color="inherit">
             Direct Messages
           </Typography>
         </Item>
@@ -103,7 +142,7 @@ function Contacts(props: Props) {
           className={`${val === "2" ? "active" : ""}`}
           onClick={() => setValue("2")}
         >
-          <Typography variant="subtitle2" fontWeight={600} color="inherit">
+          <Typography variant="subtitle2" fontWeight={500} color="inherit">
             Group Chats
           </Typography>
         </Item>
@@ -113,77 +152,103 @@ function Contacts(props: Props) {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Search style={{ color: "#5b66a9" }} />
+                <Search style={{ color: "#A29181" }} />
               </InputAdornment>
             ),
           }}
           fullWidth
           placeholder="Search from contact list"
         />
-        <IconButton sx={{ p: "8px 0" }} onClick={handleChat}>
-          <AddCircle style={{ color: "#5b66a9" }} />
-        </IconButton>
       </ContactHeader>
+      {loading ? (
+        <LoadingContainer>
+          <LoadingStack />
+          <LoadingStack />
+          <LoadingStack />
+          <LoadingStack />
+          <LoadingStack />
+          <LoadingStack />
+        </LoadingContainer>
+      ) : (
+        <>
+        {props.contactList.length > 0 && 
+        <>
+        <Typography m={2}>Contacts</Typography>
+         <ContactList>
+         {props.contactList.map((chat, idx) => (
+           <ContactCard
+             key={idx}
+             onClick={() =>
+               props.handleChat(chat, {
+                 _id: chat._id,
+                 isGroup: chat.isGroup,
+                 name: chat.isGroup
+                   ? "Group Chat"
+                   : handleUserDetails("NAME", chat),
+                 profileImage: chat.isGroup
+                   ? img
+                   : handleUserDetails("IMG", chat),
+                 users: chat.users,
+               })
+             }
+           >
+             {chat.isGroup ? (
+               <>
+                 <ImgBox>
+                   <Img src={img} />
+                 </ImgBox>
+                 <div className="flex" style={{ flex: 1 }}>
+                   <Typography
+                     variant="subtitle1"
+                     className="message-contact-text"
+                   >
+                     {chat.conversationName}
+                   </Typography>
+                   <Typography fontSize={12} color={"#ffffff55"}>
+                     {formatDate(chat.updatedAt)}
+                   </Typography>
+                 </div>
+               </>
+             ) : (
+               <>
+                 <ImgBox>
+                   <Img
+                     src={
+                       handleUserDetails('IMG', chat)
+                      }
+                   />
+                 </ImgBox>
+                 <div className="flex" style={{ flex: 1 }}>
+                   <Typography
+                     variant="subtitle1"
+                     className="message-contact-text"
+                   >
+                     {chat.users[0]._id === user._id
+                       ? chat.users[1].username
+                       : chat.users[0].username}
+                   </Typography>
+                   <Typography fontSize={12} color={"#ffffff55"}>
+                     {formatDate(chat.updatedAt)}
+                   </Typography>
+                 </div>
+               </>
+             )}
+           </ContactCard>
 
-      <ContactList>
-        {props.chatList.map((chat, idx) => (
-          <ContactCard
-            key={idx}
-            onClick={() =>
-              props.handleChat(
-                chat._id,
-                chat.isGroup ? "Group Chat" : (chat.users[0]._id === user._id ? chat.users[1].name : chat.users[0].name ),
-                chat.isGroup ? img : (chat.users[0]._id === user._id ? chat.users[1].profileImage : chat.users[0].profileImage),
-                chat
-              )
-            }
-          >
-            {chat.isGroup ? (
-              <>
-                <ImgBox>
-                  <Img src={img} />
-                </ImgBox>
-                <div className="flex" style={{ flex: 1 }}>
-                  <Typography
-                    variant="subtitle1"
-                    className="message-contact-text"
-                  >
-                    {chat.conversationName}
-                  </Typography>
-                  <Typography fontSize={12} color={"#ffffff55"}>
-                    {formatDate(chat.updatedAt)}
-                  </Typography>
-                </div>
-              </>
-            ) : (
-              <>
-                <ImgBox>
-                  <Img src={chat.users[0]._id === user._id ? chat.users[1].profileImage : chat.users[0].profileImage} />
-                </ImgBox>
-                <div className="flex" style={{ flex: 1 }}>
-                  <Typography
-                    variant="subtitle1"
-                    className="message-contact-text"
-                  >
-                    {chat.users[0]._id === user._id ? chat.users[1].name : chat.users[0].name}
-                  </Typography>
-                  <Typography fontSize={12} color={"#ffffff55"}>
-                    {formatDate(chat.updatedAt)}
-                  </Typography>
-                </div>
-              </>
-            )}
-          </ContactCard>
-        ))}
-      </ContactList>
-      {createChat && (
-        <CreateChat
-          open={createChat}
-          chatList={props.chatList}
-          handleChat={handleChat}
-          handleChatList={props.handleChatList}
-        />
+         ))}
+       </ContactList>
+       </>
+        }
+       <Typography m={2}>Other Contacts</Typography>
+        <OtherContacts
+         contactList={props.contactList}
+         handlecontactList={props.handlecontactList}
+
+         />
+        
+        </>
       )}
+
     </ContactSection>
   );
 }
