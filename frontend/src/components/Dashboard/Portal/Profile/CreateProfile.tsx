@@ -25,7 +25,6 @@ const ProfileContainer = styled("div")({
   borderRadius: "24px",
   padding: "40px 44px",
   width: "500px",
-  // height: "540px",
   overflow: "auto",
   flexDirection: "column",
 });
@@ -58,7 +57,7 @@ const renderProfileForm = (steps: number, profile: any, setProfile: Dispatch<Set
 };
 function CreateProfile() {
   const dispatch = useDispatch();
-  const [alert, setAlert] = useState(-1);
+  const [alert, setAlert] = useState(0);
   const [alertText, setAlertText] = useState("")
   const [steps, setSteps] = useState(0);
   const user: User = useSelector((state: State) => state.user) as User;
