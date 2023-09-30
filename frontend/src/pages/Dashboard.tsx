@@ -75,6 +75,7 @@ function Dashboard() {
     console.log("in fetch user profile", user)
     await getUser({ userId: user._id })
       .then((res) => {
+        if(!res.data.error)
         dispatch(setUser(res.data));
       })
       .catch((error) => console.log(error));
@@ -87,51 +88,52 @@ function Dashboard() {
     setTab(() => value);
   };
 
-  return loading ? (
-    <div>Loading ...</div>
-  ) : user.firstLogin.profile ? (
-    <CreateProfile />
-  ) : (
-    <div style={{ display: "flex" }}>
-      <SideNavbar
-        tab={tab}
-        handleTabs={handleChange}
-        handleLogout={handleLogoutDialog}
-      />
-      <BoxWrapper>{Portal(tab)}</BoxWrapper>
-      {showLogout.logout && (
-        <Dialog open={true} PaperProps={{ style: { width: "400px" } }}>
-          {showLogout.user && (
-            <DialogTitle className="flex" style={{ fontSize: "24px" }}>
-              Logout
-              <IconButton
-                sx={{ p: 0 }}
-                onClick={() => handleLogoutDialog(true)}
-              >
-                <Close />
-              </IconButton>
-            </DialogTitle>
-          )}
+  return <CreateProfile />
+  //  loading ? (
+  //   <div>Loading ...</div>
+  // ) : user.firstLogin.profile ? (
+    // <CreateProfile />
+  // ) : (
+  //   <div style={{ display: "flex" }}>
+  //     <SideNavbar
+  //       tab={tab}
+  //       handleTabs={handleChange}
+  //       handleLogout={handleLogoutDialog}
+  //     />
+  //     <BoxWrapper>{Portal(tab)}</BoxWrapper>
+  //     {showLogout.logout && (
+  //       <Dialog open={true} PaperProps={{ style: { width: "400px" } }}>
+  //         {showLogout.user && (
+  //           <DialogTitle className="flex" style={{ fontSize: "24px" }}>
+  //             Logout
+  //             <IconButton
+  //               sx={{ p: 0 }}
+  //               onClick={() => handleLogoutDialog(true)}
+  //             >
+  //               <Close />
+  //             </IconButton>
+  //           </DialogTitle>
+  //         )}
 
-          <DialogContent>
-            <Typography mt={1.5} variant={"subtitle1"}>
-              {showLogout.user
-                ? "Are you sure you want to logout."
-                : "Session Expired. Click continue to Login again."}
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <MainButton onClick={handleLogout}>Continue</MainButton>
-            {showLogout.user && (
-              <SecondaryButton onClick={() => handleLogoutDialog(true)}>
-                Close
-              </SecondaryButton>
-            )}
-          </DialogActions>
-        </Dialog>
-      )}
-    </div>
-  );
+  //         <DialogContent>
+  //           <Typography mt={1.5} variant={"subtitle1"}>
+  //             {showLogout.user
+  //               ? "Are you sure you want to logout."
+  //               : "Session Expired. Click continue to Login again."}
+  //           </Typography>
+  //         </DialogContent>
+  //         <DialogActions>
+  //           <MainButton onClick={handleLogout}>Continue</MainButton>
+  //           {showLogout.user && (
+  //             <SecondaryButton onClick={() => handleLogoutDialog(true)}>
+  //               Close
+  //             </SecondaryButton>
+  //           )}
+  //         </DialogActions>
+  //       </Dialog>
+  //     )}
+  //   </div>
+  // );
 }
 
 export default Dashboard;

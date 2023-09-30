@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { InputContainer } from "./DocDetails";
-import { IconButton, TextField, Typography, styled } from "@mui/material";
-import { MainButton } from "../../../Login/SignIn";
+import { IconButton, Typography, styled } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Input } from "../../../Form/TextInput";
 
@@ -36,32 +35,32 @@ const UploadButton = styled("div")({
   alignItems: "center",
 });
 const TextInput = styled(Input)({
-    margin: '8px 0',
-    width: '100%'
-})
-const SubmitButton = styled(MainButton)({
-  marginTop: "32px",
-  color: "white",
-  ":hover": {},
+  margin: "8px 0",
+  width: "100%",
 });
 
-type Props = {};
+type Props = {
+  profile: any;
+  setProfile: Dispatch<SetStateAction<any>>;
+};
+
 export function UserDetails(props: Props) {
   const user: User = useSelector((state: State) => state.user) as User;
 
-  const [profileImg, setProfileImg] = useState(user.profileImage);
-  const [fileList, setFileList] = useState<FileList | null>(null);
+  //   const [fileList, setFileList] = useState<FileList | null>(null);
 
   const handleProfileImage = (e: any) => {
     const image = e.target.files;
-    setFileList(image);
-    setProfileImg(URL.createObjectURL(image[0] as any));
+    // setFileList(image);
+    props.setProfile({
+      profileImage: URL.createObjectURL(image[0] as any),
+    });
   };
   return (
     <div>
       {" "}
       <ImgContainer>
-        <Image src={profileImg} />
+        <Image src={props.profile.profileImage} />
         <UploadContainer>
           <UploadButton>
             <IconButton
@@ -98,19 +97,47 @@ export function UserDetails(props: Props) {
   );
 }
 
-export function UserNewDetails() {
+export function UserNewDetails(props: Props) {
   return (
     <div>
-      <TextInput name="firstName" placeholder="Enter your first name" />
-      <TextInput name="lastName" placeholder="Enter your last name" />
+      <TextInput
+        name="firstName"
+        value={props.profile.firstName}
+        onChange={(e) => {
+            const updatedProfile = {...props.profile}
+            updatedProfile.firstName = e.target.value
+            props.setProfile(updatedProfile)
+        }}
+        placeholder="Enter your first name"
+      />
+      <TextInput
+        name="lastName"
+        value={props.profile.lastName}
+        onChange={(e) => {
+            const updatedProfile = {...props.profile}
+            updatedProfile.lastName = e.target.value
+            props.setProfile(updatedProfile)
+        }}
+       
+        placeholder="Enter your last name"
+      />
     </div>
   );
 }
 
-export function AdditionalDetails() {
+export function AdditionalDetails(props: Props) {
   return (
-    <div>
-      <Input name="bio" placeholder="Enter your bio..." multiline />
-    </div>
+      <TextInput
+        name="bio"
+        value={props.profile.bio}
+        onChange={(e) => {
+            const updatedProfile = {...props.profile}
+            updatedProfile.bio = e.target.value
+            props.setProfile(updatedProfile)
+        }}
+        placeholder="Enter your bio..."
+        rows={4}
+        multiline
+      />
   );
 }

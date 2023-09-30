@@ -2,7 +2,7 @@ import { Download, FileUpload, Visibility } from "@mui/icons-material";
 import { IconButton, Typography, styled } from "@mui/material";
 import PDFViewer from "./PDFViewer";
 import { useState } from "react";
-import { onboardingDocs } from "../../../../utils/constants";
+// import { onboardingDocs } from "../../../../utils/constants";
 import signPreview from "../../../../assets/sign-preview.svg";
 
 export const InputContainer = styled("div")({
@@ -38,11 +38,11 @@ const SignContainer = styled("div")({
     alignItems: "center",
     justifyContent: "center",
   });
-  const DocumentContainer = styled("div")({
-    display: "grid",
-    gap: "8px",
-    marginBottom: "24px",
-  });
+//   const DocumentContainer = styled("div")({
+//     display: "grid",
+//     gap: "8px",
+//     marginBottom: "24px",
+//   });
  export const Document = styled("div")({
     width: "100%",
     background: "#d5d5d5",
@@ -53,14 +53,14 @@ const SignContainer = styled("div")({
     alignItems: "center",
   });
   
-type DocumentType = {
-    id: string,
-    filePath: string,
-    acknowledged: boolean;
-  }
+// type DocumentType = {
+//     id: string,
+//     filePath: string,
+//     acknowledged: boolean;
+//   }
 export function DocDetails () {
-    const [docsList, setDocList] = useState<DocumentType[]>(onboardingDocs);
-    const [fileList, setFileList] = useState<FileList | null>(null);
+    // const [docsList, setDocList] = useState<DocumentType[]>(onboardingDocs);
+    // const [fileList, setFileList] = useState<FileList | null>(null);
     const [sign, setSign] = useState<FileList | null>(null);
     const [previewSign, setSignImage] = useState(signPreview);
     const [viewDoc, setViewDoc] = useState(false);
@@ -73,15 +73,15 @@ export function DocDetails () {
         // addSignatureToPdf();
       };
       
-  const handleViewDoc = (docPath: string) => {
-    setDoc(docPath);
-    setViewDoc((prev) => !prev);
-  };
+//   const handleViewDoc = (docPath: string) => {
+//     setDoc(docPath);
+//     setViewDoc((prev) => !prev);
+//   };
     
     return <>  <SignContainer>
     <SignInput>
       <FileUpload style={{ color: "#A29181", fontSize: '36px' }} />
-      <Typography variant="h5" color={"#ffffff"} align="center">
+      <Typography variant="h6" color={"#ffffff"} align="center">
         Upload your signature
       </Typography>
 

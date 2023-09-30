@@ -1,14 +1,14 @@
-import { IconButton, Typography, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import TextInput from "../../../Form/TextInput";
 import { MainButton, SecondaryButton } from "../../../Login/SignIn";
-import { Dispatch, SetStateAction, useState } from "react";
+import {  Dispatch, SetStateAction, useState } from "react";
 import { editUser } from "../../../../axios";
 import { setUser } from "../../../../store/action";
 import { AdditionalDetails, UserDetails, UserNewDetails } from "./UserDetails";
 import { DocDetails } from "./DocDetails";
 import PaymentDetails from "./PaymentDetails";
 import AlertContainer from "../../../Login/AlertContainer";
+import { ReviewProfile, SuccessContainer } from "./ReviewProfile";
 
 const Container = styled("div")({
   display: "flex",
@@ -37,30 +37,39 @@ const ActionContainer = styled("div")({
   margin: "8px 0",
 });
 
-const renderProfileForm = (steps: number) => {
+const renderProfileForm = (steps: number, profile: any, setProfile: Dispatch<SetStateAction<any>>) => {
   switch (steps) {
     case 0:
-      return <UserDetails />;
+      return <UserDetails profile={profile} setProfile={setProfile} />;
     case 1:
-      return <UserNewDetails />;
+      return <UserNewDetails profile={profile} setProfile={setProfile} />;
     case 2:
-      return <AdditionalDetails />;
+      return <AdditionalDetails profile={profile} setProfile={setProfile} />;
     case 3:
       return <DocDetails />;
     case 4:
       return <PaymentDetails />;
+    case 5: 
+      return <ReviewProfile />
+    default: 
+      return <SuccessContainer />
     // default: return <SuccessContainer />
   }
 };
 function CreateProfile() {
   const dispatch = useDispatch();
-  const [doc, setDoc] = useState("");
   const [alert, setAlert] = useState(-1);
+  const [alertText, setAlertText] = useState("")
   const [steps, setSteps] = useState(0);
+  const user: User = useSelector((state: State) => state.user) as User;
+
   const [profile, setProfile] = useState({
+    profileImage: user.profileImage,
     firstName: "",
     lastName: "",
     bio: "",
+    email: user.email,
+    username: user.username
   });
 
   const onSubmit = async (data: any) => {
@@ -94,23 +103,37 @@ function CreateProfile() {
         setSteps((prev) => prev + 1);
         break;
       case 1:
-        if (!profile.firstName || !profile.lastName) {
+        console.log(profile)
+        console.log(profile.firstName, profile.lastName)
+        if (!profile.firstName.length || !profile.lastName.length) {
           setAlert(-1)
+          setAlertText('Please provide the given below details to proceed')
         } else {
           setSteps(prev => prev+1)
         }
         break;
       case 2:
+        setSteps((prev) => prev + 1);
+        break;
       case 3:
+        setSteps((prev) => prev + 1);
+        break;
       case 4:
+        if(user.firstLogin.payment) {
+          setAlertText('Please complete the payment to proceed')
+          setAlert(-1)
+          setSteps((prev) => prev+1);
+
+        } else {
+          setSteps((prev) => prev+1);
+        }
+        break;
       case 5:
+        setSteps((prev) => prev + 1);
+        break;
       default:
         onSubmit(steps);
     }
-  };
-  //submit the form
-  const addSignatureToPdf = () => {
-    //update the onboarding docs with the given signature image
   };
 
   return (
@@ -119,12 +142,11 @@ function CreateProfile() {
        <AlertContainer
        setShowAlert={setAlert}
        showAlert={alert}
-       alertText={"Please submit the given below details to proceed"}
+       alertText={alertText}
      />
       }
-      
       <ProfileContainer className="flex">
-        {renderProfileForm(steps)}
+        {renderProfileForm(steps, profile, setProfile)}
         {steps < 6 && (
           <ActionContainer>
             {steps > 0 && (

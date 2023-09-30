@@ -7,6 +7,7 @@ import { Document } from "./DocDetails";
 
 function PaymentDetails() {
   const user: User = useSelector((state: State) => state.user) as User;
+  console.log("HI user in payment details", user, user.firstLogin.payment)
 
   const handlePayment = () => {
     //payment confirmation api
