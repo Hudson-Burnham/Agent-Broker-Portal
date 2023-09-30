@@ -10,6 +10,8 @@ import { forgotPassword } from "../../axios";
 
 type Props = {
   setValue: Dispatch<SetStateAction<boolean>>;
+  setAlertText: Dispatch<SetStateAction<string>>;
+  setShowAlert: Dispatch<SetStateAction<number>>;
 };
 type FormProps = {
   email: string;
@@ -30,10 +32,18 @@ function ChangePassword(props: Props) {
     console.log(data);
     try {
       await forgotPassword(data)
-        .then((res) => console.log(res))
-        .catch((error) => console.log("Hey I am error: ", error));
+        .then((res) => {
+          if(res.data?.error) {
+            props.setAlertText(res.data.error)
+            props.setShowAlert(-1)
+          } else {
+            props.setAlertText(res.data.message)
+            props.setShowAlert(1)
+          }
+        })
     } catch (error) {
-      console.log("error");
+      props.setAlertText("Encountered some error. Please retry after some time...");
+      props.setShowAlert(-1);
       reset();
     }
   };
@@ -60,7 +70,10 @@ function ChangePassword(props: Props) {
         <SecondaryButton
           variant="contained"
           style={{ marginTop: 16 }}
-          onClick={() => props.setValue((prev) => !prev)}
+          onClick={() => {
+            props.setShowAlert(0)
+            props.setValue((prev) => !prev)
+          }}
         >
           Back to Login
         </SecondaryButton>

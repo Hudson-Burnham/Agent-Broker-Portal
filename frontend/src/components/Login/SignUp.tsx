@@ -6,14 +6,9 @@ import * as Yup from "yup";
 import TextInput from "../Form/TextInput";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Form from "../Form/Form";
-import {
-  AlertBox,
-  Container,
-  MainButton,
-  LoginBox,
-  SecondaryButton,
-} from "./SignIn";
+import { Container, MainButton, LoginBox, SecondaryButton } from "./SignIn";
 import { registerUserRequest } from "../../axios";
+import AlertContainer from "./AlertContainer";
 
 interface Props {
   handleLogin: () => void;
@@ -28,6 +23,8 @@ type FormProps = {
 export default function SignUp(props: Props) {
   const [showPassword, handleShowPassword] = useState(false);
   const [showConfirmPassword, handleConfirmPassword] = useState(false);
+  const [showAlert, setShowAlert] = useState(0);
+  const [alertText, setAlertText] = useState("");
 
   const defaultValues = {
     name: "",
@@ -56,24 +53,31 @@ export default function SignUp(props: Props) {
   });
   const { reset, handleSubmit } = methods;
   const onSubmit = async (data: FormProps) => {
-    console.log(data);
+    setShowAlert(0);
     try {
-      await registerUserRequest(data)
-        .then((res) => console.log(res))
-        .catch((err) =>
-          console.log("error while registering a user , : ", err)
-        );
-      props.handleLogin();
+      await registerUserRequest(data).then((res) => {
+
+        if (res.data?.error) {
+          setAlertText(res.data.error);
+          setShowAlert(-1);
+        } else {
+          setAlertText(res.data.message);
+          setShowAlert(1);
+          props.handleLogin();
+        }
+      });
     } catch (error) {
       console.log("error");
+      setAlertText("Encountered some error. Please retry after some time...");
+      setShowAlert(-1);
       reset();
     }
   };
 
   return (
     <Container>
-      <AlertBox></AlertBox>
-      <LoginBox>
+      {showAlert !== 0 && <AlertContainer alertText={alertText} showAlert={showAlert} setShowAlert={setShowAlert} />}
+      <LoginBox style={{ marginTop: "20px" }}>
         <Typography variant="h5" fontWeight={800} mb={0.5} align="left">
           Create an account
         </Typography>

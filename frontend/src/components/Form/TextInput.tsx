@@ -34,10 +34,9 @@ export const Input = styled(TextField)({
 });
 
 const Error = styled(Box)({
-  minHeight: "24px",
+  minHeight: "28px",
   fontSize: "12px",
-  color: '#1c1c38',
-  // color: "red",
+  color: '#d5d5d5',
   textAlign: "left",
 });
 

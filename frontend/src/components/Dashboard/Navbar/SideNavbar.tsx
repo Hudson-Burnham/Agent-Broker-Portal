@@ -57,6 +57,7 @@ const Logo = styled("div")({
 type Props = {
   tab: string;
   handleTabs: (value: string) => void;
+  handleLogout: (user: boolean) => void;
 };
 
 export default function SideNavbar(props: Props) {
@@ -107,7 +108,7 @@ export default function SideNavbar(props: Props) {
             <Typography variant="subtitle1">Support</Typography>
           </CustomBox>
         </NavBox>
-        <CustomBox>
+        <CustomBox onClick={() => props.handleLogout(true)}>
           <Logout />
           <Typography variant="subtitle1">Logout</Typography>
         </CustomBox>
