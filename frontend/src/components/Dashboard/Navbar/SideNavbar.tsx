@@ -10,6 +10,8 @@ import { Typography, styled } from "@mui/material";
 import logo from "../../../assets/images/logo.png";
 import { useSelector } from "react-redux";
 
+import avatarImage from "../../../assets/profileImg.png";
+
 const FixedNav = styled("div")({
   position: "fixed",
   height: "100vh",
@@ -24,6 +26,7 @@ const FixedNav = styled("div")({
 });
 const ProfileBox = styled("div")({
   padding: "20px 36px",
+  cursor: "pointer",
 });
 const ProfileImg = styled("img")({
   width: "90px",
@@ -67,8 +70,9 @@ export default function SideNavbar(props: Props) {
   };
   return (
     <FixedNav>
-      <ProfileBox>
-        <ProfileImg src={user.profileImage} />
+      <ProfileBox onClick={() => handleNavbar("8")}>
+        {/* <ProfileImg src={user.profileImage} /> */}
+        <ProfileImg src={avatarImage} />
       </ProfileBox>
       <NavBox>
         <NavBox>
@@ -92,6 +96,13 @@ export default function SideNavbar(props: Props) {
           >
             <Chat />
             <Typography variant="subtitle1">Messages</Typography>
+          </CustomBox>
+          <CustomBox
+            className={props.tab === "5" ? "active" : ""}
+            onClick={() => handleNavbar("5")}
+          >
+            <Chat />
+            <Typography variant="subtitle1">Billings</Typography>
           </CustomBox>
           <CustomBox
             className={props.tab === "4" ? "active" : ""}

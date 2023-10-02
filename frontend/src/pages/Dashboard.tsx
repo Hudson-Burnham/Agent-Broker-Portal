@@ -3,6 +3,8 @@ import MainDashboard from "../components/Dashboard/Portal/MainDashboard/MainDash
 import Messages from "../components/Dashboard/Portal/Messages/Messages";
 import Resources from "../components/Dashboard/Portal/Resources/Resources";
 import Tutorials from "../components/Dashboard/Portal/Tutorials";
+import Billings from "../components/Dashboard/Portal/Billings";
+import Profile from "../components/Dashboard/Portal/Profile";
 import Settings from "../components/Dashboard/Portal/Settings";
 import Leaderboard from "../components/Dashboard/Portal/Leaderboard";
 import Support from "../components/Dashboard/Portal/Support";
@@ -41,11 +43,13 @@ const Portal = (value: string) => {
     case "4":
       return <Resources />;
     case "5":
-      return <Tutorials />;
+      return <Billings />;
     case "6":
       return <Settings />;
     case "7":
       return <Support />;
+    case "8":
+      return <Profile />;
   }
 };
 function Dashboard() {
@@ -57,7 +61,7 @@ function Dashboard() {
     user: false,
     logout: false,
   });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   console.log("user details after login", user);
 
   const handleLogoutDialog = (user: boolean) => {
@@ -67,16 +71,15 @@ function Dashboard() {
     });
   };
   const handleLogout = () => {
-    dispatch(logout())
-    navigate("/auth/login")
+    dispatch(logout());
+    navigate("/auth/login");
   };
 
   const fetchUserProfile = async () => {
-    console.log("in fetch user profile", user)
+    console.log("in fetch user profile", user);
     await getUser({ userId: user._id })
       .then((res) => {
-        if(!res.data.error)
-        dispatch(setUser(res.data));
+        if (!res.data.error) dispatch(setUser(res.data));
       })
       .catch((error) => console.log(error));
     setLoading(false);
