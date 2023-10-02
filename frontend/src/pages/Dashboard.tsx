@@ -1,6 +1,7 @@
 import SideNavbar from "../components/Dashboard/Navbar/SideNavbar";
 import MainDashboard from "../components/Dashboard/Portal/MainDashboard/MainDashboard";
 import Messages from "../components/Dashboard/Portal/Messages/Messages";
+import MessagesNew from "../components/Dashboard/Portal/Messages/MessagesNew";
 import Resources from "../components/Dashboard/Portal/Resources/Resources";
 import Tutorials from "../components/Dashboard/Portal/Tutorials";
 import Billings from "../components/Dashboard/Portal/Billings";
@@ -50,6 +51,8 @@ const Portal = (value: string) => {
       return <Support />;
     case "8":
       return <Profile />;
+    case "9":
+      return <MessagesNew />;
   }
 };
 function Dashboard() {

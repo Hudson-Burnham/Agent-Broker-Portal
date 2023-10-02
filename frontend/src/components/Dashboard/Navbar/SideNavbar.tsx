@@ -98,6 +98,13 @@ export default function SideNavbar(props: Props) {
             <Typography variant="subtitle1">Messages</Typography>
           </CustomBox>
           <CustomBox
+            className={props.tab === "9" ? "active" : ""}
+            onClick={() => handleNavbar("9")}
+          >
+            <Chat />
+            <Typography variant="subtitle1">MessagesNew</Typography>
+          </CustomBox>
+          <CustomBox
             className={props.tab === "5" ? "active" : ""}
             onClick={() => handleNavbar("5")}
           >
