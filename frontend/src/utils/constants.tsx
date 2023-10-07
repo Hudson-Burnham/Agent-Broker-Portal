@@ -78,54 +78,62 @@ export const actionsList = [
   },
 ];
 
-export const onboardingDocs = [
+export const onboardingDocs : CustomDocumentType[] = [
   {
     id: 0,
     filePath: file1,
     acknowledged: false,
     numPages: 1,
+    signature: "",
   },
   {
     id: 1,
     filePath: file2,
     acknowledged: false,
     numPages: 1,
+    signature: "",
   },
   {
     id: 2,
     filePath: file3,
     acknowledged: false,
     numPages: 1,
+    signature: "",
   },
   {
     id: 3,
     filePath: file4,
     acknowledged: false,
     numPages: 2,
+    signature: "",
   },
   {
     id: 4,
     filePath: file5,
     acknowledged: false,
     numPages: 1,
+    signature: "",
   },
   {
     id: 5,
     filePath: file6,
     acknowledged: false,
     numPages: 82,
+    signature: "",
   },
   {
     id: 6,
     filePath: file7,
     acknowledged: false,
     numPages: 1,
+    signature: "",
   },
   {
     id: 7,
     filePath: file8,
     acknowledged: false,
     numPages: 3,
+    signature: "",
   },
 ];
 

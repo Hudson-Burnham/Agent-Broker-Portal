@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { InputContainer } from "./DocDetails";
+import { InputContainer } from "./Document/DocDetails";
 import { IconButton, Typography, styled } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Input } from "../../../Form/TextInput";

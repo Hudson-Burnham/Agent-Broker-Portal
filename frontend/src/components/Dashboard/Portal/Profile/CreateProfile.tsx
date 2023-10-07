@@ -5,8 +5,8 @@ import {  Dispatch, SetStateAction, useState } from "react";
 import { editUser } from "../../../../axios";
 import { setUser } from "../../../../store/action";
 import { AdditionalDetails, UserDetails, UserNewDetails } from "./UserDetails";
-import { DocDetails } from "./DocDetails";
-import PaymentDetails from "./PaymentDetails";
+import { DocDetails } from "./Document/DocDetails";
+import PaymentDetails from "./Payment/PaymentDetails";
 import AlertContainer from "../../../Login/AlertContainer";
 import { ReviewProfile, SuccessContainer } from "./ReviewProfile";
 

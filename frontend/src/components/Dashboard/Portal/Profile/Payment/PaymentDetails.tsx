@@ -2,7 +2,7 @@ import { CheckCircle } from "@mui/icons-material"
 import { IconButton, Typography } from "@mui/material"
 import { useSelector } from "react-redux";
 import Payment from "./Payment";
-import { Document } from "./DocDetails";
+import { Document } from "../Document/DocDetails";
 
 
 function PaymentDetails() {

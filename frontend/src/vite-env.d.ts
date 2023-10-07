@@ -21,6 +21,13 @@ type User = {
     profileImage: string;
     firstLogin: any;
 }
+type CustomDocumentType = {
+  id: number;
+  filePath: string;
+  acknowledged: boolean;
+  numPages: number;
+  signature: string;
+};
 type State = {
     isUserLoggedIn: boolean;
     user: User | null

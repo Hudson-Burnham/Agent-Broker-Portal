@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { pdfjs, Document, Page } from "react-pdf";
+import { pdfjs, Document } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
@@ -23,9 +23,9 @@ import {
   IconButton,
   styled,
 } from "@mui/material";
-import { MainButton, SecondaryButton } from "../../../Login/SignIn";
+import { MainButton, SecondaryButton } from "../../../../Login/SignIn";
 import { CheckCircle, Close } from "@mui/icons-material";
-import { DocumentType } from "./DocDetails";
+import { PdfDocument } from "./PdfDocument";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -42,7 +42,6 @@ const ActionContainer = styled(DialogActions)({
 });
 const AgreeBtn = styled(MainButton)({
   boxShadow: "none",
-  // width: "30%",
   color: "white",
   ":hover": {
     boxShadow: "none",
@@ -50,22 +49,36 @@ const AgreeBtn = styled(MainButton)({
 });
 const DisagreeBtn = styled(SecondaryButton)({
   boxShadow: "none",
-  // width: "30%",
   ":hover": {
     boxShadow: "none",
   },
 });
 type Props = {
-  docList: DocumentType[];
-  setDocList: Dispatch<SetStateAction<DocumentType[]>>;
+  docList: CustomDocumentType[];
+  setDocList: Dispatch<SetStateAction<CustomDocumentType[]>>;
   handlePdf: () => void;
 };
 function PDFViewer(props: Props) {
-  const [action, setAction] = useState(false)
+  const [action, setAction] = useState(false);
   useEffect(() => {
-   console.log("doc list modified")
-  }, [action])
-  
+    console.log("doc list modified");
+  }, [action]);
+
+  const handleDocList = (idx: number, type: string, value: any) => {
+    let modifiedDocList = props.docList;
+    if(type === 'acknowledged' && value === true) {
+      if(!modifiedDocList[idx].signature.length) {
+        //create an alert saying cannot acknowledge the document before signing it. Scroll to the bottom of the doc and sign the document
+        return ;
+      }
+    }
+    if( type === "id" || type === "filePath" || type === "acknowledged" || type === "numPages" || type === "signature") {
+      (modifiedDocList[idx][type] as any) = value;
+      console.log(modifiedDocList[idx][type])
+    }
+    props.setDocList(modifiedDocList);
+  }
+
   return (
     <Dialog
       open={true}
@@ -100,36 +113,22 @@ function PDFViewer(props: Props) {
             </Title>
             <DialogContent style={{ height: "360px", width: "600px" }}>
               <Document file={doc.filePath} onLoadError={console.error}>
-                {Array.from(new Array(doc.numPages), (el, index) => (
-                  <div
-                    key={`page_${index + 1}_${el}`}
-                    style={{ textAlign: "center" }}
-                  >
-                    <Page pageNumber={index + 1} />
-                    <p style={{ fontSize: "12px" }}>
-                      Page {index + 1} of {doc.numPages}
-                    </p>
-                  </div>
-                ))}
+                <PdfDocument doc={doc} idx={idx} handleDocList={handleDocList} />
               </Document>
             </DialogContent>
             <ActionContainer>
               <AgreeBtn
                 onClick={() => {
-                  let modifiedDocList = props.docList;
-                  modifiedDocList[idx].acknowledged = true;
-                  props.setDocList(modifiedDocList);
-                  setAction(prev => !prev)
+                  handleDocList(idx, 'acknowledged', true)
+                  setAction((prev) => !prev);
                 }}
               >
                 Agree
               </AgreeBtn>
               <DisagreeBtn
                 onClick={() => {
-                  let modifiedDocList = props.docList;
-                  modifiedDocList[idx].acknowledged = false;
-                  props.setDocList(modifiedDocList);
-                  setAction(prev => !prev)
+                  handleDocList(idx, 'acknowledged', false)
+                  setAction((prev) => !prev);
                 }}
               >
                 Disagree

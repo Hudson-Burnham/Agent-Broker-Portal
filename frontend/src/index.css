@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Rock+Salt|Shadows+Into+Light|Cedarville+Cursive');
 :root {
   margin:0;
 }
@@ -6,6 +7,11 @@
 * {
   box-sizing: border-box;
   font-family: 'Public Sans', sans-serif !important;
+}
+
+.signature {
+  font-family: 'Shadows Into Light'!important;
+  font-weight: 900!important;
 }
 
 .flex {

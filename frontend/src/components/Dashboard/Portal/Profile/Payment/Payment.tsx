@@ -1,7 +1,7 @@
 import { loadStripe } from "@stripe/stripe-js";
-import CheckoutForm from "../CheckoutForm";
+import CheckoutForm from "../../CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
-import { createPayment } from "../../../../axios";
+import { createPayment } from "../../../../../axios";
 import { useState, useEffect } from "react";
 
 const STRIPE_PUBLISHABLE_KEY = "pk_test_51N8Uz0DEGU8ZQT0oBMi0Bsa3d33G8DwsO0pN8DLvajWYz4vlpVuY5bIAXiaLMbPAxWwCTqcwQsjOHbGVzUFZeL0c00gJxX6Jja";
