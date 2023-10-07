@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 import { Typography, styled } from "@mui/material";
 import logo from "../../../assets/images/logo.png";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 import avatarImage from "../../../assets/profileImg.png";
 
@@ -64,7 +64,7 @@ type Props = {
 };
 
 export default function SideNavbar(props: Props) {
-  const user: User = useSelector((state: State) => state.user) as User;
+  // const user: User = useSelector((state: State) => state.user) as User;
   const handleNavbar = (tab: string) => {
     props.handleTabs(tab);
   };
@@ -90,19 +90,19 @@ export default function SideNavbar(props: Props) {
             <Leaderboard />
             <Typography variant="subtitle1">Leaderboard</Typography>
           </CustomBox>
-          <CustomBox
+          {/* <CustomBox
             className={props.tab === "3" ? "active" : ""}
             onClick={() => handleNavbar("3")}
           >
             <Chat />
             <Typography variant="subtitle1">Messages</Typography>
-          </CustomBox>
+          </CustomBox> */}
           <CustomBox
             className={props.tab === "9" ? "active" : ""}
             onClick={() => handleNavbar("9")}
           >
             <Chat />
-            <Typography variant="subtitle1">MessagesNew</Typography>
+            <Typography variant="subtitle1">Messages</Typography>
           </CustomBox>
           <CustomBox
             className={props.tab === "5" ? "active" : ""}

@@ -1,4 +1,3 @@
-import React from "react";
 import { Typography, styled, Box, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
@@ -121,13 +120,13 @@ const InfoContent = styled(Typography)({
   marginTop: "4px",
 });
 
-const Bio = styled(Typography)({
-  // Add any additional styles for the bio
-});
+// const Bio = styled(Typography)({
+//   // Add any additional styles for the bio
+// });
 
-const PersonalInfo = styled(Typography)({
-  // Add any additional styles for personal information
-});
+// const PersonalInfo = styled(Typography)({
+//   // Add any additional styles for personal information
+// });
 
 function Profile() {
   return (

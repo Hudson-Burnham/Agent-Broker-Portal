@@ -4,6 +4,7 @@ type Message = {
     attachment?: any[]
     sender: User;
     chatId: Chat
+    createdAt?: string
 }
 type Chat = {
   _id: string;

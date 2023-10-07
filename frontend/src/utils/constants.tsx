@@ -7,7 +7,7 @@ import file5 from "../assets/OnboardingDocs/HB Onboarding Fee Sheet (version 1).
 import file6 from "../assets/OnboardingDocs/HudsonBurnhamMarchManual.pdf";
 import file7 from "../assets/OnboardingDocs/Office Policy Addendum 2023 Hudson Burnham.pdf";
 import file8 from "../assets/OnboardingDocs/SponsorBrokerAGREEMENT.pdf";
-import profileImage from "../assets/profileImg.png"
+import profileImage from "../assets/profileImg.png";
 export const resourcesData = [
   {
     url: "https://drive.google.com/file/d/121YKBzF5pwT_JoqjzYtN78fNFh6EgCzz/preview",
@@ -67,57 +67,65 @@ export const actionsList = [
   {
     id: "1",
     text: "Photo/Video",
-    image: <ImageOutlined />,
+    image: <ImageOutlined style={{ color: "#9FA1A2" }} />,
     accept: "image/*",
   },
   {
     id: "2",
     text: "File",
-    image: <InsertDriveFileOutlined />,
+    image: <InsertDriveFileOutlined style={{ color: "#9FA1A2" }} />,
     accept: ".pdf,.doc,.txt,application/msword,application/pdf,text/plain",
   },
 ];
 
 export const onboardingDocs = [
   {
-    id: "1",
+    id: 0,
     filePath: file1,
     acknowledged: false,
+    numPages: 1,
   },
   {
-    id: "2",
+    id: 1,
     filePath: file2,
     acknowledged: false,
+    numPages: 1,
   },
   {
-    id: "3",
+    id: 2,
     filePath: file3,
     acknowledged: false,
+    numPages: 1,
   },
   {
-    id: "4",
+    id: 3,
     filePath: file4,
     acknowledged: false,
+    numPages: 2,
   },
   {
-    id: "5",
+    id: 4,
     filePath: file5,
     acknowledged: false,
+    numPages: 1,
   },
   {
-    id: "6",
+    id: 5,
     filePath: file6,
     acknowledged: false,
+    numPages: 82,
   },
   {
-    id: "7",
+    id: 6,
     filePath: file7,
     acknowledged: false,
+    numPages: 1,
   },
   {
-    id: "8",
+    id: 7,
     filePath: file8,
     acknowledged: false,
+    numPages: 3,
   },
 ];
 
@@ -153,10 +161,9 @@ export const mockChats = [
     conversationName: "Channel#1",
     profileImg: profileImage,
     lastMessage: "Lorem ipsum dolor sit amet, consectetur adipiscing elit,...",
-    updatedAt: "12.00 pm"
-  }
- 
-]
+    updatedAt: "12.00 pm",
+  },
+];
 
 export const dealsInfo = [
   {

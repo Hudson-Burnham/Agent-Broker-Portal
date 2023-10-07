@@ -1,15 +1,15 @@
-import { Typography, styled } from "@mui/material";
-import avatar1 from "../../../../assets/images/avatars/avatar_1.png";
-import avatar2 from "../../../../assets/images/avatars/avatar_2.png";
-import avatar3 from "../../../../assets/images/avatars/avatar_3.png";
-import avatar4 from "../../../../assets/images/avatars/avatar_4.png";
+import { InputAdornment, Tooltip, styled } from "@mui/material";
 
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
-import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import PhotoIcon from "@mui/icons-material/Photo";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
+import { MessageForm, Props } from "./MessageList";
+import { AttachFile, SentimentSatisfiedAlt, Send } from "@mui/icons-material";
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import { actionsList } from "../../../../utils/constants";
+import { sendMessage } from "../../../../axios";
+import { useRef, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import Preview from "./Preview";
 
 // ... other imports as needed
 
@@ -50,20 +50,20 @@ const EmailLabel = styled("div")({
   color: "#6F6F6F",
 });
 
-const ChannelRow = styled("div")({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  width: "100%", // Ensure the row uses the full width.
-  paddingBottom: "10px", // Space below the row
-});
+// const ChannelRow = styled("div")({
+//   display: "flex",
+//   alignItems: "center",
+//   justifyContent: "space-between",
+//   width: "100%", // Ensure the row uses the full width.
+//   paddingBottom: "10px", // Space below the row
+// });
 
-const RightElements = styled("div")({
-  display: "flex",
-  alignItems: "center",
-  gap: "10px", // Giving space between elements
-  position: "relative",
-});
+// const RightElements = styled("div")({
+//   display: "flex",
+//   alignItems: "center",
+//   gap: "10px", // Giving space between elements
+//   position: "relative",
+// });
 
 const Avatar = styled("img")({
   borderRadius: "50%",
@@ -76,13 +76,13 @@ const Avatar = styled("img")({
   },
 });
 
-const AvatarCountLabel = styled("span")({
-  fontFamily: "'Futura Md BT', sans-serif",
-  fontSize: "16px",
-  fontWeight: 400,
-  lineHeight: "25px",
-  color: "#FFFFFF",
-});
+// const AvatarCountLabel = styled("span")({
+//   fontFamily: "'Futura Md BT', sans-serif",
+//   fontSize: "16px",
+//   fontWeight: 400,
+//   lineHeight: "25px",
+//   color: "#FFFFFF",
+// });
 
 const MessageAvatar = styled(Avatar)({
   // Reusing the Avatar styled component and adjusting the size
@@ -125,38 +125,62 @@ const MessageText = styled("p")({
   width: "70%",
 });
 
-const Dropdown = styled("select")({
-  backgroundColor: "transparent", // Setting background of dropdown to transparent
-  color: "#FFFFFF", // Setting color of the text in dropdown
-  fontFamily: "'Futura Md BT', sans-serif", // Ensure the font is available or add a fallback
-  fontSize: "20px",
-  fontWeight: 400,
-  lineHeight: "25px",
-  border: "none", // Removing the border
-  outline: "none",
+// const Dropdown = styled("select")({
+//   backgroundColor: "transparent", // Setting background of dropdown to transparent
+//   color: "#FFFFFF", // Setting color of the text in dropdown
+//   fontFamily: "'Futura Md BT', sans-serif", // Ensure the font is available or add a fallback
+//   fontSize: "20px",
+//   fontWeight: 400,
+//   lineHeight: "25px",
+//   border: "none", // Removing the border
+//   outline: "none",
 
-  "&:focus": {
-    outline: "none", // Remove the focus outline when dropdown is focused
-  },
+//   "&:focus": {
+//     outline: "none", // Remove the focus outline when dropdown is focused
+//   },
 
-  "& option": {
-    // Targeting the child option elements of the dropdown
-    backgroundColor: "transparent", // Setting background of options to transparent
-    color: "#FFFFFF", // Setting color of the text in options
-    fontFamily: "'Futura Md BT', sans-serif",
-    fontSize: "20px",
-    fontWeight: 400,
-    lineHeight: "25px",
-  },
-});
-
-const AddPersonButton = styled("button")({});
+//   "& option": {
+//     // Targeting the child option elements of the dropdown
+//     backgroundColor: "transparent", // Setting background of options to transparent
+//     color: "#FFFFFF", // Setting color of the text in options
+//     fontFamily: "'Futura Md BT', sans-serif",
+//     fontSize: "20px",
+//     fontWeight: 400,
+//     lineHeight: "25px",
+//   },
+// });
 
 const DividerRow = styled("div")({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   width: "100%", // Ensure the row uses the full width.
+});
+const Input = styled(TextField)({
+  borderRadius: "24px",
+  "& input": {
+    padding: "16px 4px",
+  },
+  "& fieldset": {
+    display: "none",
+  },
+});
+const AttachmentList = styled("div")({
+  position: "absolute",
+  display: "flex",
+  flexDirection: "column",
+  bottom: "110%",
+  gap: "8px",
+});
+
+const IconStyle = styled(IconButton)({
+  padding: "10px",
+  background: "#2f3b8088",
+  color: "#2f3b80",
+  ":hover": {
+    background: "#2f3b80",
+    color: "#abb6f888",
+  },
 });
 
 const DividerLine = styled("hr")({
@@ -204,44 +228,123 @@ const MessageRow = styled("div")({
 });
 
 const ChatInputBox = styled("div")({
-  height: "140px",
+  // height: "140px",
   backgroundColor: "#222529",
   margin: "20px", // margin on both sides
+  marginTop: "auto",
   borderRadius: "15px",
   border: "0.5px solid #9C9C9C",
   display: "flex",
   alignItems: "center", // to vertically center the content
   justifyContent: "space-between", // to distribute the content (input and tools)
-  padding: "0 15px", // padding on the left and right side inside the chat input box
+  padding: "10px 10px", // padding on the left and right side inside the chat input box
   // Removed absolute positioning properties (bottom, left, right)
 });
 
-// Add a styled component for the TextField, ensuring the border is removed
-const StyledTextField = styled(TextField)({
-  "& .MuiOutlinedInput-root": {
-    border: "none",
-    boxShadow: "none",
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    border: "none",
-  },
-});
+// // Add a styled component for the TextField, ensuring the border is removed
+// const StyledTextField = styled(TextField)({
+//   "& .MuiOutlinedInput-root": {
+//     border: "none",
+//     boxShadow: "none",
+//   },
+//   "& .MuiOutlinedInput-notchedOutline": {
+//     border: "none",
+//   },
+// });
 
-export default function StartChatNew() {
+export default function StartChatNew(props: Props) {
+  const user: User = useSelector((state: State) => state.user) as User;
+  const messageRef = useRef<HTMLDivElement>();
+  const [message, setMessage] = useState("");
+  const [emojiPicker, setEmojiPicker] = useState(false);
+  const [attachment, setAttachment] = useState(false);
+  const [preview, setPreview] = useState(false);
+  const [prevChat, setPrevChat]: any = useState(null);
+  const [fileList, setFileList] = useState<FileList | null>(null);
+
+  const handleEmojiPicker = () => {
+    setEmojiPicker((prev) => !prev);
+  };
+  useEffect(() => {
+    messageRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    if (prevChat && prevChat?._id !== props.chat._id) {
+      setEmojiPicker(() => false);
+      setFileList(null);
+      setPreview(false);
+      setAttachment(false);
+    }
+
+    setPrevChat(props.chat);
+  }, [props.messages]);
+
+  const handleEmojiInput = (emoji: EmojiClickData) => {
+    setMessage((prevMessage) => prevMessage + emoji.emoji);
+  };
+  const handleShowAttachment = () => {
+    setPreview(false);
+    setAttachment((prev) => !prev);
+  };
+  const handleAttachment = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFileList(e.target.files);
+    setPreview(true);
+    setAttachment(false);
+  };
+  const handleSendMessage = async () => {
+    if (message.length > 0 || fileList) {
+      setMessage("");
+      setPreview(false);
+      const data = new FormData();
+      const files = fileList ? [...fileList] : [];
+      files.forEach((file) => {
+        data.append(`file`, file);
+      });
+
+      data.append(
+        "data",
+        JSON.stringify({
+          chatId: props.chat._id,
+          sender: user._id,
+          text: message,
+        })
+      );
+
+      setFileList(null);
+
+      const newMessage: Message = {
+        chatId: props.chat,
+        sender: user,
+        text: message,
+        attachment: files,
+      };
+      props.handleMessageList(newMessage);
+      await sendMessage(data).then((res) => {
+        if (res.status) {
+          console.log("Message Sent");
+        }
+      });
+    }
+  };
+  console.log(props.messages);
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+    });
+  };
   return (
     <Container>
       <TopSection>
         <EmailRow>
-          <EmailLabel>kelly@gmail.com</EmailLabel>
+          <EmailLabel>{user.email}</EmailLabel>
         </EmailRow>
 
-        <ChannelRow>
+        {/* <ChannelRow>
           <Dropdown>
             <option># Channel 1</option>
             <option># Channel 2</option>
             <option># Channel 3</option>
             {/* Add other channels here */}
-          </Dropdown>
+        {/* </Dropdown>
           <RightElements>
             <Avatar src={avatar1} style={{ zIndex: 4 }} />
             <Avatar src={avatar2} style={{ zIndex: 3 }} />
@@ -250,37 +353,112 @@ export default function StartChatNew() {
             <AvatarCountLabel>+3</AvatarCountLabel>
             <AddPersonButton>Add Person</AddPersonButton>
           </RightElements>
-        </ChannelRow>
+        </ChannelRow> */}
 
         <DividerRow>
           <DividerLine />
-          <DateLabel>2 September 2023</DateLabel>
+          <DateLabel>Date</DateLabel>
           <DividerLine />
         </DividerRow>
       </TopSection>
 
       <BottomSection>
-        <MessageContainer>
-          <MessageRow>
-            <MessageAvatar src={avatar1} />
-            <UserDetails>
-              <UsernameLabel>David</UsernameLabel>
-              <TimestampLabel>10:00am</TimestampLabel>
-            </UserDetails>
-          </MessageRow>
-          <MessageText>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos cumque
-            pariatur quas itaque eaque sed, dicta neque commodi maxime sunt
-            voluptate! Minima numquam iusto omnis quas odio illum, cumque
-            dignissimos eum? Saepe sequi dolore fuga debitis expedita sunt illo
-            deleniti enim soluta rerum nulla facere voluptatum non, at dolorem?
-            Debitis, aliquid iste. Molestias deserunt quae eaque accusantium
-            dolores labore tempore.
-          </MessageText>
-        </MessageContainer>
+        {props.messages.map((message, idx) => (
+          <MessageContainer>
+            {(idx === 0
+              ? !(message.sender._id === user._id)
+              : props.messages[idx - 1].sender._id === user._id) ===
+            (user._id === message.sender._id) ? (
+              ""
+            ) : (
+              <MessageRow>
+                <MessageAvatar src={message.sender.profileImage} />
+                <UserDetails>
+                  <UsernameLabel>
+                    {user._id === message.sender._id ? "You" : props.chat.name}
+                  </UsernameLabel>
+                  <TimestampLabel>
+                    {formatDate(message.createdAt as string)}
+                  </TimestampLabel>
+                </UserDetails>
+              </MessageRow>
+            )}
+
+            <MessageText>{message.text}</MessageText>
+          </MessageContainer>
+        ))}
 
         <ChatInputBox>
-          <StyledTextField
+          <MessageForm>
+            {preview && <Preview file={fileList} />}
+
+            <Input
+              placeholder="Enter your message"
+              value={message}
+              InputProps={{
+                style: { color: "#6F7173" },
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <IconButton
+                      style={{ position: "relative" }}
+                      onClick={handleShowAttachment}
+                    >
+                      <AttachFile style={{ color: "#9FA1A2" }} />
+                    </IconButton>
+                    {attachment && (
+                      <AttachmentList>
+                        {actionsList.map((action) => (
+                          <Tooltip
+                            key={action.id}
+                            title={action.text}
+                            placement="right"
+                          >
+                            <IconStyle>
+                              {action.image}
+                              <input
+                                type="file"
+                                accept={action.accept}
+                                onChange={handleAttachment}
+                                style={{
+                                  opacity: 0,
+                                  position: "absolute",
+                                  width: "100%",
+                                }}
+                              />
+                            </IconStyle>
+                          </Tooltip>
+                        ))}
+                      </AttachmentList>
+                    )}
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleEmojiPicker}>
+                      <SentimentSatisfiedAlt style={{ color: "#9FA1A2" }} />
+                    </IconButton>
+                    {emojiPicker && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: "110%",
+                          right: "2%",
+                        }}
+                      >
+                        <EmojiPicker onEmojiClick={handleEmojiInput} />
+                      </div>
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+              onChange={(e) => setMessage(e.target.value)}
+              fullWidth
+            />
+            <IconButton onClick={handleSendMessage}>
+              <Send style={{ color: "#9FA1A2" }} />
+            </IconButton>
+          </MessageForm>
+          {/* <StyledTextField
             fullWidth
             placeholder="Send Message # Channel 1"
             variant="outlined"
@@ -310,7 +488,7 @@ export default function StartChatNew() {
                 </div>
               ),
             }}
-          />
+          /> */}
         </ChatInputBox>
       </BottomSection>
     </Container>

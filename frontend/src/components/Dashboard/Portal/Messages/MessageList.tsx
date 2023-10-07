@@ -1,5 +1,6 @@
 import {
   AttachFile,
+  // Chat,
   Send,
   SentimentSatisfiedAlt,
 } from "@mui/icons-material";
@@ -19,7 +20,7 @@ import Preview from "./Preview";
 import { actionsList } from "../../../../utils/constants";
 
 const MessageSection = styled("div")({
-  background: "#abb6f8",
+  // background: "#abb6f8",
   display: "flex",
   flexDirection: "column",
   flex: 1,
@@ -33,11 +34,13 @@ const ListSection = styled("div")({
   padding: "20px 16px",
   paddingTop: 0
 });
-const MessageForm = styled("div")({
+export const MessageForm = styled("div")({
   position: "relative",
   marginTop: "auto",
-  background: "#ffffff88",
+  // background: "#ffffff88",
   display: "flex",
+  width: '100%',
+  color: 'white'
 });
 
 const Input = styled(TextField)({
@@ -67,7 +70,7 @@ const IconStyle = styled(IconButton)({
   },
 });
 
-type Props = {
+export type Props = {
   chat: Chat;
   messages: Message[];
   handleMessageList: (message: Message) => void;

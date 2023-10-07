@@ -1,13 +1,14 @@
 import { CircularProgress, Typography, styled } from "@mui/material";
 import ContactsNew from "./ContactsNew";
-import MessageList from "./MessageList";
-import Profile from "./Profile";
+// import MessageList from "./MessageList";
+// import Profile from "./Profile";
 import StartChatNew from "./StartChatNew";
 import { useEffect, useState } from "react";
 import { fetchAllChats, fetchChatMessage } from "../../../../axios";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
-import ProfileDrawer from "./ProfileDrawer";
+// import ProfileDrawer from "./ProfileDrawer";
+import StartChat from "./StartChat";
 
 const MessageContainer = styled("div")({
   display: "grid",
@@ -17,8 +18,8 @@ const MessageContainer = styled("div")({
 });
 
 const Loader = styled("div")({
-  background: "#808dd6",
-  color: "#1c1c3899",
+  backgroundColor: "#1A1D21",
+  color: "white",
   display: "flex",
   gap: "20px",
   flexDirection: "column",
@@ -32,7 +33,7 @@ function MessagesNew() {
   const [contactList, setcontactList]: any[] = useState();
   const [messageList, setMessageList]: any[] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
+  // const [showProfile, setShowProfile] = useState(false);
   const user: User = useSelector((state: State) => state.user) as User;
   const socket = io("http://localhost:3000");
   useEffect(() => {
@@ -67,7 +68,7 @@ function MessagesNew() {
       setMessageList([]);
       setLoading(true);
       fetchMessages(ChatProps._id, ChatProps);
-      setShowProfile(false);
+      // setShowProfile(false);
       socket.emit("join chat", ChatProps._id);
     }
   };
@@ -78,9 +79,9 @@ function MessagesNew() {
     setMessageList((prev: Message[]) => [...prev, newMessage]);
     socket.emit("send message", newMessage);
   };
-  const handleProfile = () => {
-    setShowProfile((prev) => !prev);
-  };
+  // const handleProfile = () => {
+  //   setShowProfile((prev) => !prev);
+  // };
 
   const fetchContact = async () => {
     await fetchAllChats({ userId: user?._id })
@@ -106,46 +107,27 @@ function MessagesNew() {
           loading ? (
             <Loader>
               <CircularProgress />
-              <Typography variant="h5" fontWeight={600}>
+              <Typography variant="h5">
                 Loading Your Chats ...
               </Typography>
             </Loader>
           ) : (
-            <div style={{ display: "flex", height: "100%" }}>
-              <div
-                style={{ display: "flex", flexDirection: "column", flex: 1 }}
-              >
-                <Profile
-                  name={Chat.name}
-                  image={Chat.profileImage}
-                  handleProfile={handleProfile}
-                />
-                <MessageList
-                  chat={Chat}
-                  handleMessageList={handleMessageList}
-                  messages={messageList}
-                />
-              </div>
-
-              {showProfile ? (
-                <ProfileDrawer
-                  info={Chat.users}
-                  handleProfile={handleProfile}
-                />
-              ) : (
-                ""
-              )}
-            </div>
+            <StartChatNew
+              
+              chat={Chat}
+              handleMessageList={handleMessageList}
+              messages={messageList}
+            />
           )
         ) : loading ? (
           <Loader>
             <CircularProgress />
-            <Typography variant="h5" fontWeight={600}>
+            <Typography variant="h5" >
               Loading Your Chats ...
             </Typography>
           </Loader>
         ) : (
-          <StartChatNew />
+          <StartChat />
         )}
       </div>
     </MessageContainer>

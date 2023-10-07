@@ -13,6 +13,9 @@
   align-items: center;
   justify-content: space-between;
 }
+.swiper-horizontal {
+  width: 600px;
+}
 body {
   margin: 0;
 }

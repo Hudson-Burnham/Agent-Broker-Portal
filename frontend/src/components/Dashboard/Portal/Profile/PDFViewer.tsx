@@ -1,9 +1,20 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
-import type { PDFDocumentProxy } from "pdfjs-dist";
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/swiper-bundle.css";
+import "swiper/css/bundle";
+
+import { Pagination, Navigation } from "swiper/modules";
+
 import {
   Dialog,
   DialogActions,
@@ -13,7 +24,8 @@ import {
   styled,
 } from "@mui/material";
 import { MainButton, SecondaryButton } from "../../../Login/SignIn";
-import { Close } from "@mui/icons-material";
+import { CheckCircle, Close } from "@mui/icons-material";
+import { DocumentType } from "./DocDetails";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -21,20 +33,16 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const Title = styled(DialogTitle)({
-  borderBottom: '1px solid #d5d5d5',
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
+  borderBottom: "1px solid #d5d5d5",
 });
 const ActionContainer = styled(DialogActions)({
-  borderTop: '1px solid #d5d5d5',
+  borderTop: "1px solid #d5d5d5",
   padding: "20px 24px",
   display: "flex",
-  justifyContent: "space-between",
 });
 const AgreeBtn = styled(MainButton)({
   boxShadow: "none",
-  width: "30%",
+  // width: "30%",
   color: "white",
   ":hover": {
     boxShadow: "none",
@@ -42,29 +50,22 @@ const AgreeBtn = styled(MainButton)({
 });
 const DisagreeBtn = styled(SecondaryButton)({
   boxShadow: "none",
-  width: "30%",
+  // width: "30%",
   ":hover": {
     boxShadow: "none",
   },
 });
 type Props = {
-  file: string;
+  docList: DocumentType[];
+  setDocList: Dispatch<SetStateAction<DocumentType[]>>;
   handlePdf: () => void;
 };
 function PDFViewer(props: Props) {
-  const [previewFile, setPreviewFile] = useState<File | string>();
-  const [numPages, setNumPages] = useState<number>();
-
+  const [action, setAction] = useState(false)
   useEffect(() => {
-    setPreviewFile(props.file);
-    console.log("Preview file in pdf viewer", previewFile, props.file);
-  }, []);
-
-  const onDocumentLoadSuccess = ({
-    numPages: nextNumPages,
-  }: PDFDocumentProxy) => {
-    setNumPages(nextNumPages);
-  };
+   console.log("doc list modified")
+  }, [action])
+  
   return (
     <Dialog
       open={true}
@@ -72,31 +73,71 @@ function PDFViewer(props: Props) {
       PaperProps={{ style: { borderRadius: "20px" } }}
       onClose={props.handlePdf}
     >
-      <Title>
-        {props.file.split('/').pop()}
-        <IconButton sx={{ p: 0 }} onClick={props.handlePdf}>
-          <Close />
-        </IconButton>
-      </Title>
-      <DialogContent style={{ height: "500px", width: "600px" }}>
-        <Document file={previewFile} onLoadSuccess={onDocumentLoadSuccess}>
-          {Array.from(new Array(numPages), (el, index) => (
-            <div key={`page_${index + 1}_${el}`} style={{textAlign: 'center'}}>
-              <Page
-                pageNumber={index + 1}
-                width={600}
-              />
-              <p style={{fontSize: '12px'}}>
-                Page {index + 1} of {numPages}
-              </p>
-            </div>
-          ))}
-        </Document>
-      </DialogContent>
-      <ActionContainer>
-        <AgreeBtn>Agree</AgreeBtn>
-        <DisagreeBtn>Disagree</DisagreeBtn>
-      </ActionContainer>
+      <Swiper
+        loop={true}
+        slidesPerView={1}
+        spaceBetween={30}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
+        modules={[Pagination, Navigation]}
+      >
+        {props.docList.map((doc, idx) => (
+          <SwiperSlide key={doc.id}>
+            <Title className="flex">
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                {doc.filePath.split("/").pop()}
+                <CheckCircle
+                  color={doc.acknowledged ? "success" : "disabled"}
+                />
+              </div>
+              <IconButton sx={{ p: 0 }} onClick={props.handlePdf}>
+                <Close />
+              </IconButton>
+            </Title>
+            <DialogContent style={{ height: "360px", width: "600px" }}>
+              <Document file={doc.filePath} onLoadError={console.error}>
+                {Array.from(new Array(doc.numPages), (el, index) => (
+                  <div
+                    key={`page_${index + 1}_${el}`}
+                    style={{ textAlign: "center" }}
+                  >
+                    <Page pageNumber={index + 1} />
+                    <p style={{ fontSize: "12px" }}>
+                      Page {index + 1} of {doc.numPages}
+                    </p>
+                  </div>
+                ))}
+              </Document>
+            </DialogContent>
+            <ActionContainer>
+              <AgreeBtn
+                onClick={() => {
+                  let modifiedDocList = props.docList;
+                  modifiedDocList[idx].acknowledged = true;
+                  props.setDocList(modifiedDocList);
+                  setAction(prev => !prev)
+                }}
+              >
+                Agree
+              </AgreeBtn>
+              <DisagreeBtn
+                onClick={() => {
+                  let modifiedDocList = props.docList;
+                  modifiedDocList[idx].acknowledged = false;
+                  props.setDocList(modifiedDocList);
+                  setAction(prev => !prev)
+                }}
+              >
+                Disagree
+              </DisagreeBtn>
+            </ActionContainer>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </Dialog>
   );
 }

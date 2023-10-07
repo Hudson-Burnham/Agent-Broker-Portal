@@ -1,8 +1,7 @@
-import React from "react";
 import { Typography, styled, Box, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
-import avatarImage from "../../../assets/ProfileImg.png";
+// import avatarImage from "../../../assets/ProfileImg.png";
 
 const ProfileContainer = styled("div")({
   marginTop: "36px",
@@ -19,46 +18,46 @@ const HeaderRow = styled("div")({
   alignItems: "center",
 });
 
-const NavRow = styled("div")({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginTop: "24px", // Adding more space above
-});
+// const NavRow = styled("div")({
+//   display: "flex",
+//   justifyContent: "space-between",
+//   alignItems: "center",
+//   marginTop: "24px", // Adding more space above
+// });
 
-const ProfileImageBox = styled("div")({
-  width: "70px", // Set width
-  height: "70px", // Set height
-  borderRadius: "100%",
-  overflow: "hidden",
-  marginRight: "12px",
-  background: `url(${avatarImage}) no-repeat center/cover`, // Set the image as a background
-});
+// const ProfileImageBox = styled("div")({
+//   width: "70px", // Set width
+//   height: "70px", // Set height
+//   borderRadius: "100%",
+//   overflow: "hidden",
+//   marginRight: "12px",
+//   background: `url(${avatarImage}) no-repeat center/cover`, // Set the image as a background
+// });
 
-const EditProfileText = styled(Typography)({
-  textDecoration: "underline",
-  color: "#000000",
-  fontFamily: "Futura Bk BT",
-  fontWeight: 400,
-  fontSize: "18px",
-  lineHeight: "25px",
-});
+// const EditProfileText = styled(Typography)({
+//   textDecoration: "underline",
+//   color: "#000000",
+//   fontFamily: "Futura Bk BT",
+//   fontWeight: 400,
+//   fontSize: "18px",
+//   lineHeight: "25px",
+// });
 
-const NavButton = styled("button")<{ isSelected?: boolean }>(
-  ({ isSelected }) => ({
-    background: isSelected ? "#A29181" : "#f6f6f6",
-    color: isSelected ? "#FFFFFF" : "#000000",
-    fontFamily: "Futura Bk BT",
-    fontWeight: 400,
-    fontSize: "16px",
-    lineHeight: "25px",
-    padding: "8px 16px",
-    margin: "0 4px",
-    borderRadius: "4px",
-    border: "none",
-    cursor: "pointer",
-  })
-);
+// const NavButton = styled("button")<{ isSelected?: boolean }>(
+//   ({ isSelected }) => ({
+//     background: isSelected ? "#A29181" : "#f6f6f6",
+//     color: isSelected ? "#FFFFFF" : "#000000",
+//     fontFamily: "Futura Bk BT",
+//     fontWeight: 400,
+//     fontSize: "16px",
+//     lineHeight: "25px",
+//     padding: "8px 16px",
+//     margin: "0 4px",
+//     borderRadius: "4px",
+//     border: "none",
+//     cursor: "pointer",
+//   })
+// );
 
 const StyledBox = styled(Box)({
   background: "linear-gradient(90deg, #131E30 100%, #263E66 100%)",
@@ -84,15 +83,15 @@ const HeaderText = styled(Typography)({
   flexGrow: 1, // To allow it to consume all available space
 });
 
-const BioContent = styled(Typography)({
-  fontFamily: "Futura Bk BT",
-  fontSize: "18px",
-  fontWeight: 400,
-  lineHeight: "25px",
-  letterSpacing: "0em",
-  textAlign: "left",
-  color: "#ffffff", // Text color set to white
-});
+// const BioContent = styled(Typography)({
+//   fontFamily: "Futura Bk BT",
+//   fontSize: "18px",
+//   fontWeight: 400,
+//   lineHeight: "25px",
+//   letterSpacing: "0em",
+//   textAlign: "left",
+//   color: "#ffffff", // Text color set to white
+// });
 
 const InfoRow = styled("div")({
   display: "flex",
@@ -155,50 +154,50 @@ const InfoContent = styled(Typography)({
   marginTop: "4px",
 });
 
-const PlansContainer = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  gap: "16px",
-});
+// const PlansContainer = styled("div")({
+//   display: "flex",
+//   flexDirection: "column",
+//   gap: "16px",
+// });
 
-const PlansHeader = styled("div")({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginBottom: "16px",
-});
+// const PlansHeader = styled("div")({
+//   display: "flex",
+//   justifyContent: "space-between",
+//   alignItems: "center",
+//   marginBottom: "16px",
+// });
 
-const PlanBox = styled("div")({
-  display: "flex",
-  justifyContent: "space-between",
-  gap: "32px",
-});
+// const PlanBox = styled("div")({
+//   display: "flex",
+//   justifyContent: "space-between",
+//   gap: "32px",
+// });
 
-const PlanCard = styled("div")(({ selected }) => ({
-  padding: "16px",
-  borderRadius: "8px",
-  background: selected ? "#0E2A47" : "#FFFFFF",
-  color: selected ? "#FFFFFF" : "#000000",
-  boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.1)",
-  textAlign: "center",
-}));
+// const PlanCard = styled("div")(({ selected }) => ({
+//   padding: "16px",
+//   borderRadius: "8px",
+//   background: selected ? "#0E2A47" : "#FFFFFF",
+//   color: selected ? "#FFFFFF" : "#000000",
+//   boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.1)",
+//   textAlign: "center",
+// }));
 
-const UpgradeButton = styled("button")({
-  padding: "12px 24px",
-  borderRadius: "8px",
-  background: "#0E2A47",
-  color: "#FFFFFF",
-  border: "none",
-  cursor: "pointer",
-});
+// const UpgradeButton = styled("button")({
+//   padding: "12px 24px",
+//   borderRadius: "8px",
+//   background: "#0E2A47",
+//   color: "#FFFFFF",
+//   border: "none",
+//   cursor: "pointer",
+// });
 
-const Bio = styled(Typography)({
-  // Add any additional styles for the bio
-});
+// const Bio = styled(Typography)({
+//   // Add any additional styles for the bio
+// });
 
-const PersonalInfo = styled(Typography)({
-  // Add any additional styles for personal information
-});
+// const PersonalInfo = styled(Typography)({
+//   // Add any additional styles for personal information
+// });
 
 const FlexContainer = styled("div")({
   display: "flex",

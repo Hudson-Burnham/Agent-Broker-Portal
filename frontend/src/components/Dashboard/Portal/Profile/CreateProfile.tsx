@@ -11,6 +11,7 @@ import AlertContainer from "../../../Login/AlertContainer";
 import { ReviewProfile, SuccessContainer } from "./ReviewProfile";
 
 const Container = styled("div")({
+  background: "#131E30",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -21,7 +22,7 @@ const Container = styled("div")({
 });
 const ProfileContainer = styled("div")({
   background: "#131E30",
-  boxShadow: "20px 20px 60px #c4c4c4, -20px -20px 60px #c4c4c4",
+  // boxShadow: "20px 20px 60px #c4c4c4, -20px -20px 60px #c4c4c4",
   borderRadius: "24px",
   padding: "40px 44px",
   width: "500px",
@@ -30,8 +31,8 @@ const ProfileContainer = styled("div")({
 });
 const ActionContainer = styled("div")({
   width: "100%",
-  display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
+  display: "flex",
+  // gridTemplateColumns: "repeat(2, 1fr)",
   gap: "12px",
   margin: "8px 0",
 });

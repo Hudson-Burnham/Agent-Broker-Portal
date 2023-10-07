@@ -84,7 +84,7 @@ export const Img = styled("img")({
   width: "100%",
 });
 
-type Props = {
+export type Props = {
   contactList: any[];
   handlecontactList: (newChat: any) => void;
   handleChat: (chat: any, Chat: any) => void;
@@ -92,7 +92,7 @@ type Props = {
 function Contacts(props: Props) {
   const [loading, setLoading] = useState(true);
   const [val, setValue] = useState("1");
-  console.log("contact list check",props.contactList)
+  console.log("contact list check", props.contactList);
   // const [createChat, setCreateChat] = useState(false);
   const user: User = useSelector((state: State) => state.user) as User;
 
@@ -126,7 +126,7 @@ function Contacts(props: Props) {
         return "";
     }
   };
- 
+
   return (
     <ContactSection>
       <ContactForm>
@@ -171,84 +171,76 @@ function Contacts(props: Props) {
         </LoadingContainer>
       ) : (
         <>
-        {props.contactList.length > 0 && 
-        <>
-        <Typography m={2}>Contacts</Typography>
-         <ContactList>
-         {props.contactList.map((chat, idx) => (
-           <ContactCard
-             key={idx}
-             onClick={() =>
-               props.handleChat(chat, {
-                 _id: chat._id,
-                 isGroup: chat.isGroup,
-                 name: chat.isGroup
-                   ? "Group Chat"
-                   : handleUserDetails("NAME", chat),
-                 profileImage: chat.isGroup
-                   ? img
-                   : handleUserDetails("IMG", chat),
-                 users: chat.users,
-               })
-             }
-           >
-             {chat.isGroup ? (
-               <>
-                 <ImgBox>
-                   <Img src={img} />
-                 </ImgBox>
-                 <div className="flex" style={{ flex: 1 }}>
-                   <Typography
-                     variant="subtitle1"
-                     className="message-contact-text"
-                   >
-                     {chat.conversationName}
-                   </Typography>
-                   <Typography fontSize={12} color={"#ffffff55"}>
-                     {formatDate(chat.updatedAt)}
-                   </Typography>
-                 </div>
-               </>
-             ) : (
-               <>
-                 <ImgBox>
-                   <Img
-                     src={
-                       handleUserDetails('IMG', chat)
-                      }
-                   />
-                 </ImgBox>
-                 <div className="flex" style={{ flex: 1 }}>
-                   <Typography
-                     variant="subtitle1"
-                     className="message-contact-text"
-                   >
-                     {chat.users[0]._id === user._id
-                       ? chat.users[1].username
-                       : chat.users[0].username}
-                   </Typography>
-                   <Typography fontSize={12} color={"#ffffff55"}>
-                     {formatDate(chat.updatedAt)}
-                   </Typography>
-                 </div>
-               </>
-             )}
-           </ContactCard>
-
-         ))}
-       </ContactList>
-       </>
-        }
-       <Typography m={2}>Other Contacts</Typography>
-        <OtherContacts
-         contactList={props.contactList}
-         handlecontactList={props.handlecontactList}
-
-         />
-        
+          {props.contactList.length > 0 && (
+            <>
+              <Typography m={2}>Contacts</Typography>
+              <ContactList>
+                {props.contactList.map((chat, idx) => (
+                  <ContactCard
+                    key={idx}
+                    onClick={() =>
+                      props.handleChat(chat, {
+                        _id: chat._id,
+                        isGroup: chat.isGroup,
+                        name: chat.isGroup
+                          ? "Group Chat"
+                          : handleUserDetails("NAME", chat),
+                        profileImage: chat.isGroup
+                          ? img
+                          : handleUserDetails("IMG", chat),
+                        users: chat.users,
+                      })
+                    }
+                  >
+                    {chat.isGroup ? (
+                      <>
+                        <ImgBox>
+                          <Img src={img} />
+                        </ImgBox>
+                        <div className="flex" style={{ flex: 1 }}>
+                          <Typography
+                            variant="subtitle1"
+                            className="message-contact-text"
+                          >
+                            {chat.conversationName}
+                          </Typography>
+                          <Typography fontSize={12} color={"#ffffff55"}>
+                            {formatDate(chat.updatedAt)}
+                          </Typography>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <ImgBox>
+                          <Img src={handleUserDetails("IMG", chat)} />
+                        </ImgBox>
+                        <div className="flex" style={{ flex: 1 }}>
+                          <Typography
+                            variant="subtitle1"
+                            className="message-contact-text"
+                          >
+                            {chat.users[0]._id === user._id
+                              ? chat.users[1].username
+                              : chat.users[0].username}
+                          </Typography>
+                          <Typography fontSize={12} color={"#ffffff55"}>
+                            {formatDate(chat.updatedAt)}
+                          </Typography>
+                        </div>
+                      </>
+                    )}
+                  </ContactCard>
+                ))}
+              </ContactList>
+            </>
+          )}
+          <Typography m={2}>Other Contacts</Typography>
+          <OtherContacts
+            contactList={props.contactList}
+            handlecontactList={props.handlecontactList}
+          />
         </>
       )}
-
     </ContactSection>
   );
 }

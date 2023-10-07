@@ -1,23 +1,25 @@
 import {
-  InputAdornment,
-  LinearProgress,
+  Skeleton,
+  // InputAdornment,
+  // LinearProgress,
   Typography,
   styled,
-  Collapse,
-  Button,
+  // Collapse,
+  // Button,
 } from "@mui/material";
 
-import img from "../../../../assets/profileImg.png";
-import { Search } from "@mui/icons-material";
+// import img from "../../../../assets/profileImg.png";
+// import { Search } from "@mui/icons-material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
-import { useEffect, useState } from "react";
-import { SearchComponent } from "../MainDashboard/MainDashboard";
+import { SetStateAction, useEffect, useState } from "react";
+// import { SearchComponent } from "../MainDashboard/MainDashboard";
 // import CreateChat from "./CreateChat";
 import { useSelector } from "react-redux";
-import OtherContacts from "./OtherContacts";
+// import OtherContacts from "./OtherContacts";
+import { Props } from "./Contacts";
 
 const Container = styled("div")({
   background: "#19171D",
@@ -70,6 +72,7 @@ const SubItem = styled(Typography)({
   letterSpacing: "-1%",
   height: "25px",
   color: "#8C8C8F",
+  cursor: "pointer",
 });
 
 const Divider = styled("hr")({
@@ -105,54 +108,145 @@ export const Img = styled("img")({
   width: "100%",
 });
 
+const Loader = styled(Skeleton)({
+  background: "#8C8C8F",
+  marginTop: '8px'
+});
+
 function ContactsNew(props: Props) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const user: User = useSelector((state: State) => state.user) as User;
+  const [groupChats, setGroupChats] = useState<any[]>([]);
+  const [directChats, setDirectChats] = useState<any[]>([]);
+
+  useEffect(() => {
+    setLoading(true);
+    console.log(loading);
+    //in use effect divide chats into group chats and direct messages
+    if (props.contactList) {
+      const groupChatList: SetStateAction<any[]> = [];
+      const directContactList: SetStateAction<any[]> = [];
+
+      props.contactList.map((contact) => {
+        if (contact.isGroup) {
+          groupChatList.push(contact);
+        } else {
+          directContactList.push(contact);
+        }
+      });
+      setGroupChats(groupChatList);
+      setDirectChats(directContactList);
+      setLoading(false);
+    }
+    console.log("group chats", groupChats);
+    console.log("direct chats", directChats);
+  }, [props.contactList]);
+
+  // const formatDate = (date: string) => {
+  //   return new Date(date).toLocaleDateString("en-US", {
+  //     year: "numeric",
+  //     month: "numeric",
+  //     day: "numeric",
+  //   });
+  // };
+
+  const handleUserDetails = (detail: string, chat: any) => {
+    switch (detail) {
+      case "NAME":
+        return chat.users[0]._id === user._id
+          ? chat.users[1].username
+          : chat.users[0].username;
+      case "IMG":
+        return chat.users[0]._id === user._id
+          ? chat.users[1].profileImage
+          : chat.users[0].profileImage;
+      default:
+        return "";
+    }
+  };
 
   return (
     <Container>
-      <Title>Messages</Title>
+      {loading ? (
+        <>
+          <Loader variant="rectangular" animation="wave" width={'90%'} height={40} />
+          <Loader variant="rectangular" animation="wave" width={'90%'} height={60} />
+          <Loader variant="text" animation="wave" sx={{ fontSize: "54px" }} />
+          <Loader variant="text" animation="wave" sx={{ fontSize: "32px" }} />
+          <Loader variant="text" animation="wave" sx={{ fontSize: "28px" }} />
+          <Loader variant="text" animation="wave" sx={{ fontSize: "28px" }} />
+v        </>
+      ) : (
+        <>
+          <Title>Messages</Title>
 
-      <DropdownItem onClick={() => setDropdownOpen(!isDropdownOpen)}>
-        <Typography
-          style={{
-            fontFamily: "Futura Md BT",
-            fontWeight: 400,
-            fontSize: "20px",
-            lineHeight: "25px",
-          }}
-        >
-          Hudson Burnham
-        </Typography>
-        {isDropdownOpen ? (
-          <ExpandMoreIcon color="inherit" />
-        ) : (
-          <ExpandLessIcon color="inherit" />
-        )}
-      </DropdownItem>
+          <DropdownItem onClick={() => setDropdownOpen(!isDropdownOpen)}>
+            <Typography
+              style={{
+                fontFamily: "Futura Md BT",
+                fontWeight: 400,
+                fontSize: "20px",
+                lineHeight: "25px",
+              }}
+            >
+              Hudson Burnham
+            </Typography>
+            {isDropdownOpen ? (
+              <ExpandMoreIcon color="inherit" />
+            ) : (
+              <ExpandLessIcon color="inherit" />
+            )}
+          </DropdownItem>
 
-      {isDropdownOpen && (
-        <DropdownContent>
-          <SubItem>Conversations</SubItem>
-          <SubItem>Tags and Reactions</SubItem>
-          <SubItem>Drafts and Submissions</SubItem>
-          <SubItem>Canvas</SubItem>
-          <SubItem>Unread Messages</SubItem>
-          <SubItem>Files</SubItem>
-        </DropdownContent>
+          {isDropdownOpen && (
+            <DropdownContent>
+              <SubItem>Conversations</SubItem>
+              <SubItem>Tags and Reactions</SubItem>
+              <SubItem>Drafts and Submissions</SubItem>
+              <SubItem>Canvas</SubItem>
+              <SubItem>Unread Messages</SubItem>
+              <SubItem>Files</SubItem>
+            </DropdownContent>
+          )}
+
+          <Divider />
+
+          <SubTitles>Channels</SubTitles>
+          {groupChats.map((chat) => (
+            <SubItem>{chat.conversationName}</SubItem>
+          ))}
+          {/* <SubItem># Channel 1</SubItem>
+<SubItem># Channel 2</SubItem>
+<SubItem># Channel 3</SubItem> */}
+          {/* add a list of group chats */}
+          <SubItem>Add Channel</SubItem>
+
+          <SubTitles>Direct Message</SubTitles>
+          {directChats.map((chat, idx) => (
+            <SubItem
+              onClick={() =>
+                props.handleChat(chat, {
+                  _id: chat._id,
+                  isGroup: chat.isGroup,
+                  name: chat.isGroup
+                    ? "Group Chat"
+                    : handleUserDetails("NAME", chat),
+                  profileImage: handleUserDetails("IMG", chat),
+                  users: chat.users,
+                })
+              }
+              key={idx}
+            >
+              {handleUserDetails("NAME", chat)}
+            </SubItem>
+          ))}
+          {/* <SubItem>David</SubItem>
+<SubItem>Kelly</SubItem> */}
+
+          <SubItem>Add Co-workers</SubItem>
+        </>
       )}
-
-      <Divider />
-
-      <SubTitles>Channels</SubTitles>
-      <SubItem># Channel 1</SubItem>
-      <SubItem># Channel 2</SubItem>
-      <SubItem># Channel 3</SubItem>
-      <SubItem>Add Channel</SubItem>
-
-      <SubTitles>Direct Message</SubTitles>
-      <SubItem>David</SubItem>
-      <SubItem>Kelly</SubItem>
-      <SubItem>Add Co-workers</SubItem>
     </Container>
   );
 }

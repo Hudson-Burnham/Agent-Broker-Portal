@@ -12,6 +12,7 @@ type Props = {
 const MessageBox = styled("div")({
   maxWidth: "max-content",
   display: "flex",
+  color: '#AED2D3'
 });
 const AvatarBox = styled("div")({
   width: "50px",
@@ -30,6 +31,7 @@ const Doc = styled('div')({
   alignItems: 'center'
 })
 function MessageItem(props: Props) {
+  console.log("message item props: ",props)
   const user : User = useSelector((state: State) => state.user) as User
   const attachment = props.attachment?.length ? props.attachment[0] : null;
   console.log(props.attachment)
@@ -45,7 +47,6 @@ function MessageItem(props: Props) {
         )}`
       : URL.createObjectURL(attachment);
   }
-
 
   const renderAttachment = (type: string) => {
     switch (type) {

@@ -1,8 +1,8 @@
 import { Typography, styled } from "@mui/material";
 
 const ProfileSection = styled("div")({
-  background: "#808dd6",
-  boxShadow: "20px 20px 60px #646ea7, -20px -20px 60px #9cacff",
+  // background: "#808dd6",
+  // boxShadow: "20px 20px 60px #646ea7, -20px -20px 60px #9cacff",
   padding: "16px 20px",
   display: "flex",
   alignItems: "center",

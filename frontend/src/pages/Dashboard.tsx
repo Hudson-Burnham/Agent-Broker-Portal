@@ -3,7 +3,6 @@ import MainDashboard from "../components/Dashboard/Portal/MainDashboard/MainDash
 import Messages from "../components/Dashboard/Portal/Messages/Messages";
 import MessagesNew from "../components/Dashboard/Portal/Messages/MessagesNew";
 import Resources from "../components/Dashboard/Portal/Resources/Resources";
-import Tutorials from "../components/Dashboard/Portal/Tutorials";
 import Billings from "../components/Dashboard/Portal/Billings";
 import Profile from "../components/Dashboard/Portal/Profile";
 import Settings from "../components/Dashboard/Portal/Settings";
