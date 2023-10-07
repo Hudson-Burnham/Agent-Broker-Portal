@@ -102,3 +102,10 @@ export async function createPayment(): Promise<AxiosResponse<any>> {
       data: JSON.stringify({})
   })
 }
+
+export async function getLeaderboardData(): Promise<AxiosResponse<any>> {
+  return await axios({
+    method: 'get',
+    url: `/hubspot/leaderboard`
+  })
+}

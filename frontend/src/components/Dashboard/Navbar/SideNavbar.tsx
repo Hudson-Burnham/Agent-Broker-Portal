@@ -8,9 +8,7 @@ import {
 } from "@mui/icons-material";
 import { Typography, styled } from "@mui/material";
 import logo from "../../../assets/images/logo.png";
-// import { useSelector } from "react-redux";
-
-import avatarImage from "../../../assets/profileImg.png";
+import { useSelector } from "react-redux";
 
 const FixedNav = styled("div")({
   position: "fixed",
@@ -64,15 +62,14 @@ type Props = {
 };
 
 export default function SideNavbar(props: Props) {
-  // const user: User = useSelector((state: State) => state.user) as User;
+  const user: User = useSelector((state: State) => state.user) as User;
   const handleNavbar = (tab: string) => {
     props.handleTabs(tab);
   };
   return (
     <FixedNav>
       <ProfileBox onClick={() => handleNavbar("8")}>
-        {/* <ProfileImg src={user.profileImage} /> */}
-        <ProfileImg src={avatarImage} />
+        <ProfileImg src={user.profileImage} />
       </ProfileBox>
       <NavBox>
         <NavBox>
