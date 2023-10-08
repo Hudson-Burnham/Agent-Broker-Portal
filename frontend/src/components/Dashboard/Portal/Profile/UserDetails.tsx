@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { InputContainer } from "./Document/DocDetails";
 import { IconButton, Typography, styled } from "@mui/material";
 import { Input } from "../../../Form/TextInput";
@@ -31,12 +31,25 @@ export type CreateProfileProps = {
 };
 
 export function UserDetails(props: CreateProfileProps) {
-  const [profileImage, setProfileImage] = useState(props.profile.profileImage)
+  const [profileImage, setProfileImage] = useState<any>();
+  useEffect(() => {
+    const profileImage = props.profile.profileImage;
+    console.log("in useeffect", profileImage);
+    if (profileImage.length) {
+      const type = profileImage[0].mimetype;
+      const buffer = profileImage[0].buffer;
+      console.log(profileImage[0].mimetype);
+      console.log(profileImage[0].buffer);
+      setProfileImage(`data:${type};base64,${buffer.toString("base64")}`);
+    } else {
+      setProfileImage("http://www.gravatar.com/avatar/?d=mp");
+    }
+  }, []);
 
   const handleProfileImage = (e: any) => {
     const image = e.target.files;
-    let profile= props.profile
-    profile.profileImage = image
+    let profile = props.profile;
+    profile.profileImage = image;
     setProfileImage(URL.createObjectURL(image[0] as any))
     props.setProfile(profile);
   };
@@ -74,7 +87,11 @@ export function UserDetails(props: CreateProfileProps) {
         </UploadContainer>
       </ImgContainer>
       <div>
-        <TextInputContainer name="username" value={props.profile.username} disabled />
+        <TextInputContainer
+          name="username"
+          value={props.profile.username}
+          disabled
+        />
         <TextInputContainer name="email" value={props.profile.email} disabled />
       </div>
     </div>
@@ -88,9 +105,9 @@ export function UserNewDetails(props: CreateProfileProps) {
         name="firstName"
         value={props.profile.firstName}
         onChange={(e) => {
-            const updatedProfile = {...props.profile}
-            updatedProfile.firstName = e.target.value
-            props.setProfile(updatedProfile)
+          const updatedProfile = { ...props.profile };
+          updatedProfile.firstName = e.target.value;
+          props.setProfile(updatedProfile);
         }}
         placeholder="Enter your first name"
       />
@@ -98,11 +115,10 @@ export function UserNewDetails(props: CreateProfileProps) {
         name="lastName"
         value={props.profile.lastName}
         onChange={(e) => {
-            const updatedProfile = {...props.profile}
-            updatedProfile.lastName = e.target.value
-            props.setProfile(updatedProfile)
+          const updatedProfile = { ...props.profile };
+          updatedProfile.lastName = e.target.value;
+          props.setProfile(updatedProfile);
         }}
-       
         placeholder="Enter your last name"
       />
     </div>
@@ -111,17 +127,17 @@ export function UserNewDetails(props: CreateProfileProps) {
 
 export function AdditionalDetails(props: CreateProfileProps) {
   return (
-      <TextInputContainer
-        name="bio"
-        value={props.profile.bio}
-        onChange={(e) => {
-            const updatedProfile = {...props.profile}
-            updatedProfile.bio = e.target.value
-            props.setProfile(updatedProfile)
-        }}
-        placeholder="Enter your bio..."
-        rows={4}
-        multiline
-      />
+    <TextInputContainer
+      name="bio"
+      value={props.profile.bio}
+      onChange={(e) => {
+        const updatedProfile = { ...props.profile };
+        updatedProfile.bio = e.target.value;
+        props.setProfile(updatedProfile);
+      }}
+      placeholder="Enter your bio..."
+      rows={4}
+      multiline
+    />
   );
 }

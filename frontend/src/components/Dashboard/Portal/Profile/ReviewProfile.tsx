@@ -2,7 +2,7 @@ import { IconButton, Typography, styled } from "@mui/material";
 import { CreateProfileProps, TextInputContainer } from "./UserDetails";
 import { Document } from "./Payment/PaymentDetails";
 import { CheckCircle } from "@mui/icons-material";
-// import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const ImgContainer = styled("div")({
   position: "relative",
@@ -20,11 +20,25 @@ export const Image = styled("img")({
 });
 
 export function ReviewProfile(props: CreateProfileProps) {
-  // const [profileImage, setProfileImage] = useState(props.profile.profileImage)
+  const [profileImage, setProfileImage] = useState<any>(
+    props.profile.profileImage
+  );
+  useEffect(() => {
+    const profileImage = props.profile.profileImage;
+    if (profileImage?.length >= 0) {
+      setProfileImage(
+        profileImage[0]?.buffer
+          ? `data:${
+              profileImage[0]?.mimetype
+            };base64,${profileImage[0]?.buffer.toString("base64")}`
+          : URL.createObjectURL(profileImage[0])
+      );
+    }
+  }, []);
   return (
     <div>
       <ImgContainer>
-        <Image src={props.profile.profileImage} />
+        <Image src={profileImage} />
       </ImgContainer>
       <TextInputContainer
         name="username"

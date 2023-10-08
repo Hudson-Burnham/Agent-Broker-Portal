@@ -74,7 +74,7 @@ export default function Leaderboard() {
   };
   return (
     <Container>
-      <div className="flex">
+      <div className="flex" style={{marginBottom: '20px'}}>
         <Typography style={{ color: "#131E30", fontSize: "25px" }}>
           Leaderboard
         </Typography>

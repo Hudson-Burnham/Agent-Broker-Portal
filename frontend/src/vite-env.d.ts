@@ -18,7 +18,7 @@ type User = {
     firstName?: string;
     lastName?: string;
     email: string;
-    profileImage: string;
+    profileImage: any;
     firstLogin: any;
 }
 type CustomDocumentType = {
