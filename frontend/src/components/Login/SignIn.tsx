@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../store/action";
 import ChangePassword from "./ChangePassword";
 import AlertContainer from "./AlertContainer";
+import axios from "axios";
 
 export const Container = styled("div")({
   display: "flex",
@@ -103,12 +104,16 @@ function SignIn(props: Props) {
           setShowAlert(-1);
           setAlertText(res.data.error);
         } else {
+          const accessToken = res.data.accessToken
           const user = {
-            _id: res.data._id,
-            username: res.data.username,
-            email: res.data.email,
-            firstLogin: res.data.firstLogin,
+            _id: res.data.user._id,
+            username: res.data.user.username,
+            email: res.data.user.email,
+            firstLogin: res.data.user.firstLogin,
           };
+          console.log("access token", accessToken)
+          localStorage.setItem("access_token", res.data.accessToken);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`
           dispatch(login(user));
           setShowAlert(1);
           setAlertText(`Hi ${user.username}!, Welcome to Agent Broker Portal`);
@@ -141,6 +146,7 @@ function SignIn(props: Props) {
               name="email"
               type="email"
               label="Email"
+              value="sharmasantushti1012@gmail.com"
               placeholder="Enter your email"
             />
             <TextInput
@@ -148,6 +154,7 @@ function SignIn(props: Props) {
               label="Password"
               placeholder="Enter your password"
               type={showPassword ? "text" : "password"}
+              value="Santushti@1012"
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

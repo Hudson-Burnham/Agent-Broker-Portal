@@ -1,6 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 
 axios.defaults.baseURL="http://localhost:3000"
+axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem("access_token")))}`
+axios.defaults.withCredentials = true  
+axios.defaults.headers.common['Access-Control-Allow-Origin'] =  'http://localhost:3000';
+axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 
 export async function loginRequest(data: {
   email: string;

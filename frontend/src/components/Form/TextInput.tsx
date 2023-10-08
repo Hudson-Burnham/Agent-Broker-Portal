@@ -9,6 +9,7 @@ type Props = {
   endAdornment?: JSX.Element;
   disabled?: boolean;
   multiline?: boolean;
+  value?: any;
 };
 
 export const Input = styled(TextField)({
@@ -57,6 +58,7 @@ export default function TextInput(props: Props) {
             autoComplete="off"
             fullWidth
             label={props.label}
+            value={props.value}
             type={props?.type || "text"}
             InputLabelProps={{
               shrink: true,

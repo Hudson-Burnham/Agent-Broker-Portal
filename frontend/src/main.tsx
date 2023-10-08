@@ -8,6 +8,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistedReducer } from "./store/reducer.tsx";
 import { Store, legacy_createStore as createStore } from "redux";
 import { Provider } from "react-redux";
+import "./axios.tsx"
 
 const store: Store<State, Action> = createStore(persistedReducer);
 const persistor = persistStore(store);
