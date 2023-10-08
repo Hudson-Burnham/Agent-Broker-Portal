@@ -26,6 +26,7 @@ import {
 import { MainButton, SecondaryButton } from "../../../../Login/SignIn";
 import { CheckCircle, Close } from "@mui/icons-material";
 import { PdfDocument } from "./PdfDocument";
+import AlertContainer from "../../../../Login/AlertContainer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -60,24 +61,34 @@ type Props = {
 };
 function PDFViewer(props: Props) {
   const [action, setAction] = useState(false);
+  const [alert, setAlert] = useState(0);
+  const [alertText, setAlertText] = useState("");
   useEffect(() => {
     console.log("doc list modified");
   }, [action]);
 
   const handleDocList = (idx: number, type: string, value: any) => {
     let modifiedDocList = props.docList;
-    if(type === 'acknowledged' && value === true) {
-      if(!modifiedDocList[idx].signature.length) {
-        //create an alert saying cannot acknowledge the document before signing it. Scroll to the bottom of the doc and sign the document
-        return ;
+    if (type === "acknowledged" && value === true) {
+      setAlert(0)
+      if (!modifiedDocList[idx].signature.length) {
+        setAlert(-1);
+        setAlertText("Cannot Acknowledge the document before signing it.");
+        return;
       }
     }
-    if( type === "id" || type === "filePath" || type === "acknowledged" || type === "numPages" || type === "signature") {
+    if (
+      type === "id" ||
+      type === "filePath" ||
+      type === "acknowledged" ||
+      type === "numPages" ||
+      type === "signature"
+    ) {
       (modifiedDocList[idx][type] as any) = value;
-      console.log(modifiedDocList[idx][type])
+      console.log(modifiedDocList[idx][type]);
     }
     props.setDocList(modifiedDocList);
-  }
+  };
 
   return (
     <Dialog
@@ -113,13 +124,17 @@ function PDFViewer(props: Props) {
             </Title>
             <DialogContent style={{ height: "360px", width: "600px" }}>
               <Document file={doc.filePath} onLoadError={console.error}>
-                <PdfDocument doc={doc} idx={idx} handleDocList={handleDocList} />
+                <PdfDocument
+                  doc={doc}
+                  idx={idx}
+                  handleDocList={handleDocList}
+                />
               </Document>
             </DialogContent>
             <ActionContainer>
               <AgreeBtn
                 onClick={() => {
-                  handleDocList(idx, 'acknowledged', true)
+                  handleDocList(idx, "acknowledged", true);
                   setAction((prev) => !prev);
                 }}
               >
@@ -127,7 +142,7 @@ function PDFViewer(props: Props) {
               </AgreeBtn>
               <DisagreeBtn
                 onClick={() => {
-                  handleDocList(idx, 'acknowledged', false)
+                  handleDocList(idx, "acknowledged", false);
                   setAction((prev) => !prev);
                 }}
               >
@@ -137,6 +152,14 @@ function PDFViewer(props: Props) {
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {alert && (
+        <AlertContainer
+          showAlert={alert}
+          setShowAlert={setAlert}
+          alertText={alertText}
+        />
+      )}
     </Dialog>
   );
 }

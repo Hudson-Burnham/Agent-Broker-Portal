@@ -93,7 +93,8 @@ function Dashboard() {
     setTab(() => value);
   };
 
-  return loading ? (
+  return <CreateProfile />
+  loading ? (
     <div>Loading ...</div>
   ) : user.firstLogin.profile ? (
     <CreateProfile />

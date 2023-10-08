@@ -43,6 +43,7 @@ export async function editUser(data: FormData): Promise<AxiosResponse<any>> {
 }
 
 export async function getUser(data: {userId: string}): Promise<AxiosResponse<any>> {
+  console.log("user id in get user function in axsion", data.userId)
   return await axios({
     method: 'get',
     url: `/user/${data.userId}`

@@ -1,23 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { InputContainer } from "./Document/DocDetails";
 import { IconButton, Typography, styled } from "@mui/material";
-import { useSelector } from "react-redux";
 import { Input } from "../../../Form/TextInput";
+import { ImgContainer, Image } from "./ReviewProfile";
 
-const ImgContainer = styled("div")({
-  position: "relative",
-  borderRadius: "50%",
-  width: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  marginBottom: "20px",
-});
-const Image = styled("img")({
-  borderRadius: "50%",
-  width: "135px",
-  height: "135px",
-});
 const UploadContainer = styled("div")({
   position: "absolute",
   top: "75%",
@@ -34,33 +20,31 @@ const UploadButton = styled("div")({
   justifyContent: "center",
   alignItems: "center",
 });
-const TextInput = styled(Input)({
+export const TextInputContainer = styled(Input)({
   margin: "8px 0",
   width: "100%",
 });
 
-type Props = {
+export type CreateProfileProps = {
   profile: any;
   setProfile: Dispatch<SetStateAction<any>>;
 };
 
-export function UserDetails(props: Props) {
-  const user: User = useSelector((state: State) => state.user) as User;
-
-  //   const [fileList, setFileList] = useState<FileList | null>(null);
+export function UserDetails(props: CreateProfileProps) {
+  const [profileImage, setProfileImage] = useState(props.profile.profileImage)
 
   const handleProfileImage = (e: any) => {
     const image = e.target.files;
-    // setFileList(image);
-    props.setProfile({
-      profileImage: URL.createObjectURL(image[0] as any),
-    });
+    let profile= props.profile
+    profile.profileImage = image
+    setProfileImage(URL.createObjectURL(image[0] as any))
+    props.setProfile(profile);
   };
   return (
     <div>
       {" "}
       <ImgContainer>
-        <Image src={props.profile.profileImage} />
+        <Image src={profileImage} />
         <UploadContainer>
           <UploadButton>
             <IconButton
@@ -90,17 +74,17 @@ export function UserDetails(props: Props) {
         </UploadContainer>
       </ImgContainer>
       <div>
-        <TextInput name="username" value={user.username} disabled />
-        <TextInput name="email" value={user.email} disabled />
+        <TextInputContainer name="username" value={props.profile.username} disabled />
+        <TextInputContainer name="email" value={props.profile.email} disabled />
       </div>
     </div>
   );
 }
 
-export function UserNewDetails(props: Props) {
+export function UserNewDetails(props: CreateProfileProps) {
   return (
     <div>
-      <TextInput
+      <TextInputContainer
         name="firstName"
         value={props.profile.firstName}
         onChange={(e) => {
@@ -110,7 +94,7 @@ export function UserNewDetails(props: Props) {
         }}
         placeholder="Enter your first name"
       />
-      <TextInput
+      <TextInputContainer
         name="lastName"
         value={props.profile.lastName}
         onChange={(e) => {
@@ -125,9 +109,9 @@ export function UserNewDetails(props: Props) {
   );
 }
 
-export function AdditionalDetails(props: Props) {
+export function AdditionalDetails(props: CreateProfileProps) {
   return (
-      <TextInput
+      <TextInputContainer
         name="bio"
         value={props.profile.bio}
         onChange={(e) => {
