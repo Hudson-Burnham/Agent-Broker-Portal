@@ -33,7 +33,7 @@ export async function forgotPassword(data: {
 }): Promise<AxiosResponse<any>> {
   return await axios({
     method: "post",
-    url: `user/forgot`,
+    url: `auth/forgot`,
     data: data,
   });
 }
@@ -114,3 +114,37 @@ export async function getLeaderboardData(): Promise<AxiosResponse<any>> {
     url: `/hubspot/leaderboard`
   })
 }
+
+
+let refresh = false
+axios.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    if (error.response.status === 403 && !refresh) {
+      refresh = true
+      try {
+        const response = await axios({
+          method: "post",
+          url: `auth/refresh`,
+          withCredentials: true
+        }) ;
+        console.log("on error , access token",localStorage.getItem("access_token"));
+        console.log("on error : beaere token",axios.defaults.headers.common["Authorization"])
+
+        if (response.status < 300) {
+          refresh = true
+          localStorage.setItem("access_token", response.data.accessToken);
+
+          error.response.config.headers["Authorization"] = `Bearer ${response.data.accessToken}`;
+          
+          return axios(error.response.config);
+        }
+      } catch(error) {
+        //set the error banner to logout and do login once again
+        console.log("hi I am error in refresh call", error)
+      }
+    }
+    refresh = false
+    return axios(error.response.config);;
+  }
+);

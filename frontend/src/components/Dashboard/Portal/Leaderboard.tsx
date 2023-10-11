@@ -49,7 +49,7 @@ const Cell = styled("div")({
     justifyContent: "flex-start",
   },
 });
-const columns = ["Deal Owner", "Count of Deals", "Amount(in $)"];
+const columns = ["Deal Owner", "Closed Won Deals", "Amount(in $)"];
 export default function Leaderboard() {
   const user: User = useSelector((state: State) => state.user) as User;
   const [page, setPage] = useState(1);
