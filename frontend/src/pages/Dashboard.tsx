@@ -4,7 +4,6 @@ import Messages from "../components/Dashboard/Portal/Messages/Messages";
 import Resources from "../components/Dashboard/Portal/Resources/Resources";
 import Billings from "../components/Dashboard/Portal/Billings";
 import Profile from "../components/Dashboard/Portal/Profile";
-import Settings from "../components/Dashboard/Portal/Settings";
 import Leaderboard from "../components/Dashboard/Portal/Leaderboard";
 import Support from "../components/Dashboard/Portal/Support";
 import { useEffect, useState } from "react";
@@ -43,8 +42,6 @@ const Portal = (value: string) => {
       return <Resources />;
     case "5":
       return <Billings />;
-    case "6":
-      return <Settings />;
     case "7":
       return <Support />;
     case "8":

@@ -4,6 +4,7 @@ import {
   Dashboard,
   Leaderboard,
   Logout,
+  Money,
   QuestionAnswer,
 } from "@mui/icons-material";
 import { Typography, styled } from "@mui/material";
@@ -101,7 +102,7 @@ export default function SideNavbar(props: Props) {
             className={props.tab === "5" ? "active" : ""}
             onClick={() => handleNavbar("5")}
           >
-            <Chat />
+            <Money />
             <Typography variant="subtitle1">Billings</Typography>
           </CustomBox>
           <CustomBox

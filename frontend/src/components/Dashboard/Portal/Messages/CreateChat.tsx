@@ -13,6 +13,7 @@ import { SearchComponent } from "../MainDashboard/MainDashboard";
 import { useState } from "react";
 import { createNewChat, searchUsers } from "../../../../axios";
 import { useSelector } from "react-redux";
+import AlertContainer from "../../../Login/AlertContainer";
 
 const Title = styled(DialogTitle)({
   display: "flex",
@@ -52,6 +53,8 @@ function CreateChat(props: Props) {
   const [searchUser, setUser] = useState("");
   const [searchUserList, setUserList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState(0);
+  const [alertText, setAlertText] = useState("");
   const user: User = useSelector((state: State) => state.user) as User;
 
   const handleNewChat = async (newUserid: string) => {
@@ -67,7 +70,6 @@ function CreateChat(props: Props) {
   };
 
   const handleSearchUser = async () => {
-  
     if (searchUser.length) {
       setLoading(true);
       await searchUsers({ userId: user._id, user: searchUser })
@@ -75,9 +77,14 @@ function CreateChat(props: Props) {
           setUserList(res.data);
           setLoading(false);
         })
-        .catch((err) => console.log("error in handle search user", err));
+        .catch((err) => {
+          setAlertText("Ran into some error. Please try again later");
+          setAlert(-1);
+          console.log("error in handle search user", err);
+          setLoading(false);
+        });
     }
-    setUser('')
+    setUser("");
   };
   return (
     <Dialog
@@ -94,6 +101,13 @@ function CreateChat(props: Props) {
         },
       }}
     >
+      {alert && (
+        <AlertContainer
+          showAlert={alert}
+          setShowAlert={setAlert}
+          alertText={alertText}
+        />
+      )}
       <Title>
         <Typography>Invite User for Chat</Typography>
         <IconButton onClick={props.handleChat}>
@@ -104,7 +118,7 @@ function CreateChat(props: Props) {
         <SearchComponent
           value={searchUser}
           onChange={(e) => setUser(e.target.value)}
-          style={{padding: '4px'}}
+          style={{ padding: "4px" }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="start">

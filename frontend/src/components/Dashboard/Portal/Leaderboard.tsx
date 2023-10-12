@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getLeaderboardData } from "../../../axios";
 
-const Container = styled("div")({
+export const Container = styled("div")({
   display: "flex",
   flexDirection: "column",
   overflow: "auto",
