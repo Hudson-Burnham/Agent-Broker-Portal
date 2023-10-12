@@ -63,7 +63,9 @@ type Props = {
 
 export default function SideNavbar(props: Props) {
   const user: User = useSelector((state: State) => state.user) as User;
-  const profileImage =  `data:${user.profileImage[0]?.mimetype};base64,${user.profileImage[0]?.buffer.toString("base64")}`
+  const profileImage = `data:${
+    user.profileImage[0]?.mimetype
+  };base64,${user.profileImage[0]?.buffer.toString("base64")}`;
   const handleNavbar = (tab: string) => {
     props.handleTabs(tab);
   };
@@ -88,16 +90,9 @@ export default function SideNavbar(props: Props) {
             <Leaderboard />
             <Typography variant="subtitle1">Leaderboard</Typography>
           </CustomBox>
-          {/* <CustomBox
-            className={props.tab === "3" ? "active" : ""}
-            onClick={() => handleNavbar("3")}
-          >
-            <Chat />
-            <Typography variant="subtitle1">Messages</Typography>
-          </CustomBox> */}
           <CustomBox
             className={props.tab === "9" ? "active" : ""}
-            onClick={() => handleNavbar("9")}
+            onClick={() => handleNavbar("3")}
           >
             <Chat />
             <Typography variant="subtitle1">Messages</Typography>

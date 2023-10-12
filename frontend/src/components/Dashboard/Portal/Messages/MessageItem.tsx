@@ -48,6 +48,15 @@ function MessageItem(props: Props) {
       : URL.createObjectURL(attachment);
   }
 
+  const displayAvatar = (profileImage: any) => {
+    if(Array.isArray(profileImage)) {
+      return `data:${
+        user.profileImage[0]?.mimetype
+      };base64,${user.profileImage[0]?.buffer.toString("base64")}`;
+    }
+    return profileImage;
+  }
+
   const renderAttachment = (type: string) => {
     switch (type) {
       case "IMG":
@@ -81,7 +90,7 @@ function MessageItem(props: Props) {
         ) : (
           <Avatar>
             <img
-              src={props.isUser ? user.profileImage : props.profileImg}
+              src={displayAvatar(props.isUser ? user.profileImage : props.profileImg)}
               width={"100%"}
               height={"100%"}
               style={{ borderRadius: "50%" }}

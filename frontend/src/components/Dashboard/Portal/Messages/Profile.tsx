@@ -1,25 +1,16 @@
-import { Typography, styled } from "@mui/material";
+import { Person } from "@mui/icons-material";
+import { IconButton, Typography, styled } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const ProfileSection = styled("div")({
-  // background: "#808dd6",
-  // boxShadow: "20px 20px 60px #646ea7, -20px -20px 60px #9cacff",
-  padding: "16px 20px",
+  background: "#1A1D21",
+  color: 'white',
+  padding: "30px",
   display: "flex",
-  alignItems: "center",
+  flexDirection: "column",
   gap: "16px",
   cursor: "pointer",
-});
-
-const ImgBox = styled("div")({
-  background: "white",
-  borderRadius: "100%",
-  height: "40px",
-  width: "40px",
-});
-const Img = styled("img")({
-  borderRadius: "100%",
-  height: "100%",
-  width: "100%",
+  borderBottom: "1px solid #B8B8B8"
 });
 
 type Props = {
@@ -28,16 +19,22 @@ type Props = {
   handleProfile: () => void;
 };
 function Profile(props: Props) {
+  const user: User = useSelector((state: State) => state.user) as User;
   return (
     <ProfileSection>
-      <ImgBox onClick={props.handleProfile}>
-        <Img src={props.image} />
-      </ImgBox>
-      <Typography onClick={props.handleProfile} variant="h6">
-        {props.name}
-      </Typography>
+    
+      <div style={{display:'flex', justifyContent: 'flex-end', marginBottom: "8px"}}>
+        <IconButton sx={{ p: 0 }}>
+          <Person style={{ color: "#6F6F6F" }} />
+        </IconButton>
+        <Typography style={{ color: "#6F6F6F" }}>{user.email}</Typography>
+      </div>
+      <div>
+        <Typography onClick={props.handleProfile} variant="h5">
+          {props.name}
+        </Typography>
+      </div>
     </ProfileSection>
   );
 }
-
 export default Profile;

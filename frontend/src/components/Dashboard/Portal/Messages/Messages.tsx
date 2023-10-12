@@ -8,6 +8,7 @@ import { fetchAllChats, fetchChatMessage } from "../../../../axios";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import ProfileDrawer from "./ProfileDrawer";
+import AlertContainer from "../../../Login/AlertContainer";
 
 const MessageContainer = styled("div")({
   display: "grid",
@@ -17,8 +18,8 @@ const MessageContainer = styled("div")({
 });
 
 const Loader = styled("div")({
-  background: "#808dd6",
-  color: "#1c1c3899",
+  background: "#1A1D21",
+  color: "#d5d5d5",
   display: "flex",
   gap: "20px",
   flexDirection: "column",
@@ -33,8 +34,10 @@ function Messages() {
   const [messageList, setMessageList]: any[] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [alert, setAlert] = useState(0);
+  const [alertText, setAlertText] = useState("");
   const user: User = useSelector((state: State) => state.user) as User;
-  const socket = io("http://localhost:3000");
+  const socket = io("https://hudsonbackend.hudsonburnham.ai/");
   useEffect(() => {
     fetchContact();
     socket.emit("setup", user._id);
@@ -57,12 +60,16 @@ function Messages() {
         setMessageList(res.data);
         setLoading(false);
       })
-      .catch((error) =>
-        console.log("error while fetching the messags of chat", error)
-      );
+      .catch((error) => {
+        setAlert(-1);
+        setAlertText(
+          "Ran into error while fetching chats, please try reloading or try again after some time"
+        );
+        console.log(error)
+      });
   };
   const handleChat = async (chat: any, ChatProps: any) => {
-    console.log(chat)
+    console.log(chat);
     if (Chat === undefined || ChatProps._id !== Chat._id) {
       setMessageList([]);
       setLoading(true);
@@ -94,6 +101,15 @@ function Messages() {
 
   return (
     <MessageContainer>
+      {alert ? (
+        <AlertContainer
+          alertText={alertText}
+          showAlert={alert}
+          setShowAlert={setAlert}
+        />
+      ) : (
+        <></>
+      )}
       <Contacts
         contactList={contactList}
         handlecontactList={handlecontactList}
@@ -137,17 +153,16 @@ function Messages() {
               )}
             </div>
           )
-        ) : ( loading ?
-            (<Loader>
-              <CircularProgress />
-              <Typography variant="h5" fontWeight={600}>
-                Loading Your Chats ...
-              </Typography>
-            </Loader>
-          )
-           : (
+        ) : loading ? (
+          <Loader>
+            <CircularProgress />
+            <Typography variant="h5" fontWeight={600}>
+              Loading Your Chats ...
+            </Typography>
+          </Loader>
+        ) : (
           <StartChat />
-        ))}
+        )}
       </div>
     </MessageContainer>
   );

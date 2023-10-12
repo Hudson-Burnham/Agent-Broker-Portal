@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 
-axios.defaults.baseURL="http://localhost:3000"
+axios.defaults.baseURL="https://hudsonbackend.hudsonburnham.ai/"
 axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem("access_token")))}`
 axios.defaults.withCredentials = true  
-axios.defaults.headers.common['Access-Control-Allow-Origin'] =  'http://localhost:3000';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] =  "https://hudsonbackend.hudsonburnham.ai/";
 axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 
 export async function loginRequest(data: {
@@ -54,11 +54,10 @@ export async function getUser(data: {userId: string}): Promise<AxiosResponse<any
   })
 }
 
-export async function searchUsers(data: {contactList: any[], userId: string}): Promise<AxiosResponse<any>> {
+export async function searchUsers(data: {user: string, userId: string}): Promise<AxiosResponse<any>> {
   return await axios({
-    method: 'post',
-    url: `/user/search`,
-    data: data
+    method: 'get',
+    url: `/user?searchUser=${data.user}&id=${data.userId}`
   })
 } 
 
@@ -145,6 +144,6 @@ axios.interceptors.response.use(
       }
     }
     refresh = false
-    return axios(error.response.config);;
+    return Promise.reject(error);
   }
 );

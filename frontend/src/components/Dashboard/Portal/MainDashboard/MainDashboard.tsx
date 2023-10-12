@@ -41,7 +41,6 @@ const ChatHeader = styled("div")({
 export const SearchComponent = styled(TextField)({
   background: "#F6F6F6",
   borderRadius: "5px",
-  maxWidth: "182px",
   "& input": {
     padding: "8px 0px",
     color: "#000000",
@@ -85,6 +84,7 @@ function MainDashboard() {
             <ChatHeader>
               <Typography>Chat</Typography>
               <SearchComponent
+                style={{maxWidth: "182px"}}
                 placeholder="Search..."
                 InputProps={{
                   startAdornment: (

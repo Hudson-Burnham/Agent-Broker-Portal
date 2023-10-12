@@ -1,6 +1,5 @@
 import {
   AttachFile,
-  // Chat,
   Send,
   SentimentSatisfiedAlt,
 } from "@mui/icons-material";
@@ -20,27 +19,29 @@ import Preview from "./Preview";
 import { actionsList } from "../../../../utils/constants";
 
 const MessageSection = styled("div")({
-  // background: "#abb6f8",
+  background: "#1A1D21",
   display: "flex",
   flexDirection: "column",
   flex: 1,
   overflow: "auto",
+  padding: "20px 30px"
 });
 const ListSection = styled("div")({
   display: "flex",
   flexDirection: "column",
   flex: 1,
   overflow: "scroll",
-  padding: "20px 16px",
-  paddingTop: 0
+  paddingTop: 0,
 });
 export const MessageForm = styled("div")({
   position: "relative",
   marginTop: "auto",
-  // background: "#ffffff88",
+  background : "#222529",
+  color: "#9C9C9C",
+  padding: '10px',
+  borderRadius:"16px",
   display: "flex",
-  width: '100%',
-  color: 'white'
+  width: "100%",
 });
 
 const Input = styled(TextField)({
@@ -63,10 +64,10 @@ const AttachmentList = styled("div")({
 const IconStyle = styled(IconButton)({
   padding: "10px",
   background: "#2f3b8088",
-  color: "#2f3b80",
+  color: "#9C9C9C",
   ":hover": {
     background: "#2f3b80",
-    color: "#abb6f888",
+    color: "#9C9C9C",
   },
 });
 
@@ -84,7 +85,7 @@ function MessageList(props: Props) {
   const [preview, setPreview] = useState(false);
   const [prevChat, setPrevChat]: any = useState(null);
   const [fileList, setFileList] = useState<FileList | null>(null);
-  
+
   const handleEmojiPicker = () => {
     setEmojiPicker((prev) => !prev);
   };
@@ -172,6 +173,7 @@ function MessageList(props: Props) {
         <Input
           placeholder="Enter your message"
           value={message}
+          inputProps={{style: {color: '#9C9C9C'}}}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -179,7 +181,7 @@ function MessageList(props: Props) {
                   style={{ position: "relative" }}
                   onClick={handleShowAttachment}
                 >
-                  <AttachFile />
+                  <AttachFile style={{color: '#9C9C9C'}} />
                 </IconButton>
                 {attachment && (
                   <AttachmentList>
@@ -211,7 +213,7 @@ function MessageList(props: Props) {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={handleEmojiPicker}>
-                  <SentimentSatisfiedAlt />
+                  <SentimentSatisfiedAlt style={{color: '#9C9C9C'}} />
                 </IconButton>
                 {emojiPicker && (
                   <div
@@ -231,7 +233,7 @@ function MessageList(props: Props) {
           fullWidth
         />
         <IconButton onClick={handleSendMessage}>
-          <Send />
+          <Send style={{color: '#9C9C9C'}} />
         </IconButton>
       </MessageForm>
     </MessageSection>

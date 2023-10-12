@@ -123,7 +123,6 @@ function ContactsNew(props: Props) {
   useEffect(() => {
     setLoading(true);
     console.log(loading);
-    //in use effect divide chats into group chats and direct messages
     if (props.contactList) {
       const groupChatList: SetStateAction<any[]> = [];
       const directContactList: SetStateAction<any[]> = [];
