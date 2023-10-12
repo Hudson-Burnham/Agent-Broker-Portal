@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Hudson-Burnham.github.io/Agent-Broker-Portal",
+  "homepage": "https://Hudson-Burnham.github.io/Agent-Broker-Portal-frontend",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
