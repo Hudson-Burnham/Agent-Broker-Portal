@@ -25,7 +25,7 @@ export function ReviewProfile(props: CreateProfileProps) {
   );
   useEffect(() => {
     const profileImage = props.profile.profileImage;
-    if (profileImage?.length >= 0) {
+    if (Array.isArray(profileImage)) {
       setProfileImage(
         profileImage[0]?.buffer
           ? `data:${

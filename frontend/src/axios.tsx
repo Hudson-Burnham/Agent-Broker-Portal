@@ -2,9 +2,7 @@ import axios, { AxiosResponse } from "axios";
 
 axios.defaults.baseURL="https://hudsonbackend.hudsonburnham.ai/"
 axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem("access_token")))}`
-axios.defaults.withCredentials = true  
 axios.defaults.headers.common['Access-Control-Allow-Origin'] =  "https://hudsonbackend.hudsonburnham.ai/";
-axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
 
 export async function loginRequest(data: {
   email: string;
@@ -47,7 +45,6 @@ export async function editUser(data: FormData): Promise<AxiosResponse<any>> {
 }
 
 export async function getUser(data: {userId: string}): Promise<AxiosResponse<any>> {
-  console.log("user id in get user function in axsion", data.userId)
   return await axios({
     method: 'get',
     url: `/user/${data.userId}`

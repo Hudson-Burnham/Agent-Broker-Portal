@@ -35,7 +35,7 @@ export function UserDetails(props: CreateProfileProps) {
   useEffect(() => {
     const profileImage = props.profile.profileImage;
     console.log("in useeffect", profileImage);
-    if (profileImage.length) {
+    if (Array.isArray(profileImage)) {
       const type = profileImage[0].mimetype;
       const buffer = profileImage[0].buffer;
       console.log(profileImage[0].mimetype);
