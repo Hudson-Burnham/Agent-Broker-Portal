@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from "axios";
 
 axios.defaults.baseURL="https://hudsonbackend.hudsonburnham.ai/"
 axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem("access_token")))}`
-axios.defaults.headers.common['Access-Control-Allow-Origin'] =  "https://hudsonbackend.hudsonburnham.ai/";
 
 export async function loginRequest(data: {
   email: string;

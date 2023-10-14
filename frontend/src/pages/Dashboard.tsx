@@ -89,7 +89,7 @@ function Dashboard() {
 
   return loading ? (
     <div>Loading ...</div>
-  ) : !user.firstLogin.profile ? (
+  ) : user.firstLogin.profile ? (
     <CreateProfile />
   ) : (
     <div style={{ display: "flex" }}>

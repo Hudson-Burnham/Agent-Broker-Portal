@@ -137,103 +137,103 @@ function Contacts(props: Props) {
           <LoadingStack />
         </LoadingContainer>
       ) : (
-        <>
-          {props.contactList.length > 0 && (
-            <div className="scroll-container">
-              <Typography m={2}>Channels</Typography>
-              <ContactList>
-                {groupChats.map((chat, idx) => (
-                  <ContactCard
-                    key={idx}
-                    onClick={() =>
-                      props.handleChat(chat, {
-                        _id: chat._id,
-                        isGroup: true,
-                        name: "Group Chat",
-                        profileImage: img,
-                        users: chat.users,
-                      })
-                    }
-                  >
-                    <ImgBox>
-                      <Img src={img} />
-                    </ImgBox>
-                    <div className="flex" style={{ flex: 1 }}>
-                      <Typography
-                        variant="subtitle1"
-                        className="message-contact-text"
-                      >
-                        {chat.conversationName}
-                      </Typography>
-                    </div>
-                  </ContactCard>
-                ))}
-              </ContactList>
-              <div
-                style={{
-                  padding: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <IconButton onClick={() => {}}>
-                  <AddBox style={{ color: "#8C8C8F" }} />
-                </IconButton>
-                <Typography variant="body1" color={"#8C8C8F"}>
-                  Add Channel
-                </Typography>
-              </div>
-              <></>
-              <>
-                <Typography m={2}>Direct Message</Typography>
-                <ContactList>
-                  {directChats.map((chat, idx) => (
-                    <ContactCard
-                      key={idx}
-                      onClick={() =>
-                        props.handleChat(chat, {
-                          _id: chat._id,
-                          isGroup: false,
-                          name: handleUserDetails("NAME", chat),
-                          profileImage: handleUserDetails("IMG", chat),
-                          users: chat.users,
-                        })
-                      }
-                    >
-                      <ImgBox>
-                        <Img src={handleUserDetails("IMG", chat)} />
-                      </ImgBox>
-                      <div className="flex" style={{ flex: 1 }}>
-                        <Typography
-                          variant="subtitle1"
-                          className="message-contact-text"
-                        >
-                          {chat.users[0]._id === user._id
-                            ? chat.users[1].username
-                            : chat.users[0].username}
-                        </Typography>
-                      </div>
-                    </ContactCard>
-                  ))}
-                </ContactList>
-                <div
-                  style={{
-                    padding: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
+        <div className="scroll-container">
+          <Typography m={2}>Channels</Typography>
+         
+
+          {groupChats.length > 0 && (
+            <ContactList>
+              {groupChats.map((chat, idx) => (
+                <ContactCard
+                  key={idx}
+                  onClick={() =>
+                    props.handleChat(chat, {
+                      _id: chat._id,
+                      isGroup: true,
+                      name: "Group Chat",
+                      profileImage: img,
+                      users: chat.users,
+                    })
+                  }
                 >
-                  <IconButton onClick={() => setCreateChat((prev) => !prev)}>
-                    <AddBox style={{ color: "#8C8C8F" }} />
-                    <Typography variant="body1" color={"#8C8C8F"}>
-                      Add Co-worker
+                  <ImgBox>
+                    <Img src={img} />
+                  </ImgBox>
+                  <div className="flex" style={{ flex: 1 }}>
+                    <Typography
+                      variant="subtitle1"
+                      className="message-contact-text"
+                    >
+                      {chat.conversationName}
                     </Typography>
-                  </IconButton>
-                </div>
-              </>
-            </div>
+                  </div>
+                </ContactCard>
+              ))}
+            </ContactList>
           )}
-        </>
+           <div
+            style={{
+              padding: "12px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <IconButton onClick={() => {}}>
+              <AddBox style={{ color: "#8C8C8F" }} />
+              <Typography variant="body1" color={"#8C8C8F"}>
+                Add Co-worker
+              </Typography>
+            </IconButton>
+          </div>
+          <Typography m={2}>Direct Messages</Typography>
+
+          {directChats.length > 0 && (
+            <ContactList>
+              {directChats.map((chat, idx) => (
+                <ContactCard
+                  key={idx}
+                  onClick={() =>
+                    props.handleChat(chat, {
+                      _id: chat._id,
+                      isGroup: false,
+                      name: handleUserDetails("NAME", chat),
+                      profileImage: handleUserDetails("IMG", chat),
+                      users: chat.users,
+                    })
+                  }
+                >
+                  <ImgBox>
+                    <Img src={handleUserDetails("IMG", chat)} />
+                  </ImgBox>
+                  <div className="flex" style={{ flex: 1 }}>
+                    <Typography
+                      variant="subtitle1"
+                      className="message-contact-text"
+                    >
+                      {chat.users[0]._id === user._id
+                        ? chat.users[1].username
+                        : chat.users[0].username}
+                    </Typography>
+                  </div>
+                </ContactCard>
+              ))}
+            </ContactList>
+          )}
+           <div
+            style={{
+              padding: "12px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <IconButton onClick={() => setCreateChat((prev) => !prev)}>
+              <AddBox style={{ color: "#8C8C8F" }} />
+              <Typography variant="body1" color={"#8C8C8F"}>
+                Add Co-worker
+              </Typography>
+            </IconButton>
+          </div>
+        </div>
       )}
     </ContactSection>
   );
