@@ -24,16 +24,10 @@ export function ReviewProfile(props: CreateProfileProps) {
     props.profile.profileImage
   );
   useEffect(() => {
-    const profileImage = props.profile.profileImage;
-    if (Array.isArray(profileImage)) {
-      setProfileImage(
-        profileImage[0]?.buffer
-          ? `data:${
-              profileImage[0]?.mimetype
-            };base64,${profileImage[0]?.buffer.toString("base64")}`
-          : URL.createObjectURL(profileImage[0])
-      );
-    }
+    const profile = profileImage;
+    if(typeof profile !== 'string') {
+      setProfileImage(URL.createObjectURL(profile[0]));
+    } 
   }, []);
   return (
     <div>
