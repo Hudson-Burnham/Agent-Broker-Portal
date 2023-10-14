@@ -64,12 +64,20 @@ type Props = {
 
 export default function SideNavbar(props: Props) {
   const user: User = useSelector((state: State) => state.user) as User;
-  const profileImage = `data:${
-    user.profileImage[0]?.mimetype
-  };base64,${user.profileImage[0]?.buffer.toString("base64")}`;
+  let profileImage;
+
+  if (Array.isArray(user.profileImage)) {
+    profileImage = `data:${
+      user.profileImage[0]?.mimetype
+    };base64,${user.profileImage[0]?.buffer.toString("base64")}`;
+  } else {
+    profileImage = user.profileImage;
+  }
+
   const handleNavbar = (tab: string) => {
     props.handleTabs(tab);
   };
+
   return (
     <FixedNav>
       <ProfileBox onClick={() => handleNavbar("8")}>

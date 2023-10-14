@@ -78,20 +78,22 @@ function CreateProfile() {
   });
 
   const onSubmit = async (data: any) => {
-    const { acknowledgement, profileImage, ...user_details } = data
+    const { acknowledgement, profileImage, ...user_details } = data;
     try {
       const formData = new FormData();
       formData.append("user_details", JSON.stringify(user_details));
-      profileImage?.length && formData.append('files', profileImage[0]);
+      Array.isArray(profileImage)
+        ? formData.append("files", profileImage[0])
+        : formData.append("files", profileImage);
       await editUser(formData)
         .then((res) => {
-          setAlertText("Profile Successfully Created! Navigating to Dashboard")
-          setAlert(1)
+          setAlertText("Profile Successfully Created! Navigating to Dashboard");
+          setAlert(1);
           dispatch(setUser(res.data));
           setTimeout(() => {
-            setAlert(0)
-            navigate("/")
-          }, 1000)
+            setAlert(0);
+            navigate("/");
+          }, 1000);
         })
         .catch((error) => console.log(error));
     } catch (error) {
@@ -128,7 +130,6 @@ function CreateProfile() {
           setAlert(-1);
           setAlertText(
             "Please acknowledge the onboarding documents to proceed"
-            
           );
           setSteps((prev) => prev + 1);
         }
@@ -143,7 +144,7 @@ function CreateProfile() {
         }
         break;
       case 5:
-        onSubmit(profile)
+        onSubmit(profile);
         break;
       default:
         break;
