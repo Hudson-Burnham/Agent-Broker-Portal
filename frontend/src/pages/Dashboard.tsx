@@ -23,6 +23,7 @@ import { logout, setUser } from "../store/action";
 import { Close } from "@mui/icons-material";
 import { MainButton, SecondaryButton } from "../components/Login/SignIn";
 import { useNavigate } from "react-router-dom";
+import Properties from "../components/Dashboard/Portal/Properties/Properties";
 
 const BoxWrapper = styled("div")({
   width: "100%",
@@ -42,6 +43,8 @@ const Portal = (value: string) => {
       return <Resources />;
     case "5":
       return <Billings />;
+    case "6": 
+      return <Properties />
     case "7":
       return <Support />;
     case "8":
@@ -72,7 +75,6 @@ function Dashboard() {
   };
 
   const fetchUserProfile = async () => {
-    console.log("in fetch user profile", user);
     await getUser({ userId: user._id })
       .then((res) => {
         if (!res.data.error) dispatch(setUser(res.data));

@@ -34,7 +34,6 @@ function MessageItem(props: Props) {
   console.log("message item props: ",props)
   const user : User = useSelector((state: State) => state.user) as User
   const attachment = props.attachment?.length ? props.attachment[0] : null;
-  console.log("attachment if any", props.attachment)
   let attachmentSrc = "";
   let name=""
   let type = "TEXT";
@@ -49,8 +48,7 @@ function MessageItem(props: Props) {
   }
 
   const displayAvatar = (profileImage: any) => {
-    console.log("profile Image in display avatar",JSON.parse(JSON.stringify(profileImage)));
-    
+    profileImage = JSON.parse(JSON.stringify(profileImage))
     if(Array.isArray(profileImage) && profileImage.length) {
       return `data:${
         user.profileImage[0]?.mimetype

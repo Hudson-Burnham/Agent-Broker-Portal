@@ -2,6 +2,7 @@ import {
   Apps,
   Chat,
   Dashboard,
+  Home,
   Leaderboard,
   Logout,
   Money,
@@ -100,18 +101,11 @@ export default function SideNavbar(props: Props) {
             <Typography variant="subtitle1">Leaderboard</Typography>
           </CustomBox>
           <CustomBox
-            className={props.tab === "9" ? "active" : ""}
+            className={props.tab === "3" ? "active" : ""}
             onClick={() => handleNavbar("3")}
           >
             <Chat />
             <Typography variant="subtitle1">Messages</Typography>
-          </CustomBox>
-          <CustomBox
-            className={props.tab === "5" ? "active" : ""}
-            onClick={() => handleNavbar("5")}
-          >
-            <Money />
-            <Typography variant="subtitle1">Billings</Typography>
           </CustomBox>
           <CustomBox
             className={props.tab === "4" ? "active" : ""}
@@ -121,12 +115,28 @@ export default function SideNavbar(props: Props) {
             <Typography variant="subtitle1">Resources</Typography>
           </CustomBox>
           <CustomBox
+            className={props.tab === "5" ? "active" : ""}
+            onClick={() => handleNavbar("5")}
+          >
+            <Money />
+            <Typography variant="subtitle1">Billings</Typography>
+          </CustomBox>
+           <CustomBox
+            className={props.tab === "6" ? "active" : ""}
+            onClick={() => handleNavbar("6")}
+          >
+            <Home />
+            <Typography variant="subtitle1">Search</Typography>
+          </CustomBox>
+       
+          <CustomBox
             className={`${props.tab === "7" ? "active" : ""}`}
             onClick={() => handleNavbar("7")}
           >
             <QuestionAnswer />
             <Typography variant="subtitle1">Support</Typography>
           </CustomBox>
+         
         </NavBox>
         <CustomBox onClick={() => props.handleLogout(true)}>
           <Logout />

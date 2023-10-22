@@ -49,6 +49,7 @@ function Messages() {
 
   useEffect(() => {
     socket.on("receive message", (newMessage: Message) => {
+      console.log("message received")
       setMessageList((prev: Message[]) => [...prev, newMessage]);
       fetchContact();
     });
