@@ -136,7 +136,13 @@ function CreateChat(props: Props) {
             <CircularProgress />
           ) : (
             searchUserList.map((searchUser: User, idx) => (
-              <UserCard key={idx} onClick={() => handleNewChat(searchUser._id)}>
+              <UserCard
+                key={idx}
+                onClick={() => {
+                  handleNewChat(searchUser._id);
+                  props.handleChat();
+                }}
+              >
                 <Image src={searchUser.profileImage} />
                 <Typography variant="body1" fontWeight={600}>
                   {searchUser.username}

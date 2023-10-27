@@ -8,6 +8,7 @@ type Props = {
   isUser: boolean;
   profileImg?: string;
   attachment?: any[];
+  username: string;
 };
 const MessageBox = styled("div")({
   maxWidth: "max-content",
@@ -32,6 +33,7 @@ const Doc = styled('div')({
 })
 function MessageItem(props: Props) {
   console.log("message item props: ",props)
+
   const user : User = useSelector((state: State) => state.user) as User
   const attachment = props.attachment?.length ? props.attachment[0] : null;
   let attachmentSrc = "";
@@ -101,6 +103,11 @@ function MessageItem(props: Props) {
         )}
       </AvatarBox>
       <div style={{paddingTop: '4px'}}>
+      {props.prevUser === props.isUser ? (
+          ""
+        ) : (
+          <Typography variant="h6" mt={-1.5} mb={1} fontWeight={700} color="#fff">{props.username}</Typography>
+        )}
         {attachment ? renderAttachment(type) : ""}
         <Typography>{props.text}</Typography>
       </div>

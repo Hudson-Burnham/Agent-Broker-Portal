@@ -155,6 +155,7 @@ function MessageList(props: Props) {
           <MessageItem
             key={idx}
             text={message.text}
+            username={message.sender.username}
             prevUser={
               idx === 0
                 ? !(message.sender._id === user._id)

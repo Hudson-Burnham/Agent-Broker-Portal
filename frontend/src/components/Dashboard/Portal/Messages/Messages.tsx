@@ -4,11 +4,16 @@ import MessageList from "./MessageList";
 import Profile from "./Profile";
 import { useEffect, useState } from "react";
 import StartChat from "./StartChat";
-import { fetchAllChats, fetchChatMessage } from "../../../../axios";
+import {
+  fetchAllChats,
+  fetchAnnouncements,
+  fetchChatMessage,
+} from "../../../../axios";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import ProfileDrawer from "./ProfileDrawer";
 import AlertContainer from "../../../Login/AlertContainer";
+import profilePic from "../../../../assets/profileImg.png";
 
 const MessageContainer = styled("div")({
   display: "grid",
@@ -16,7 +21,6 @@ const MessageContainer = styled("div")({
   height: "100%",
   overflow: "auto",
 });
-
 const Loader = styled("div")({
   background: "#1A1D21",
   color: "#d5d5d5",
@@ -38,6 +42,7 @@ function Messages() {
   const [alertText, setAlertText] = useState("");
   const user: User = useSelector((state: State) => state.user) as User;
   const socket = io("https://hudsonbackend.hudsonburnham.ai/");
+  // const socket = io("http://localhost:3000");
   useEffect(() => {
     fetchContact();
     socket.emit("setup", user._id);
@@ -49,12 +54,44 @@ function Messages() {
 
   useEffect(() => {
     socket.on("receive message", (newMessage: Message) => {
-      console.log("message received")
+      console.log("message received");
       setMessageList((prev: Message[]) => [...prev, newMessage]);
       fetchContact();
     });
+    socket.on("announceMessage", async (message) => {
+      if ((await message.sender._id) !== user._id) {
+        setAlert(1);
+        setAlertText(message.text);
+        console.log("we recevied an announcemnt", message);
+      }
+    });
   });
-  const fetchMessages = async (_id: string, chat: Chat) => {
+  const fetchMessages = async (
+    _id: string,
+    chat: Chat,
+    announcement: boolean = false
+  ) => {
+    if (announcement) {
+      await fetchAnnouncements()
+        .then((res) => {
+          console.log(res);
+          setNewChat({
+            _id: "test-announcement_id",
+            username: "Announcements",
+            profileImage: profilePic,
+          });
+          setMessageList(res.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setAlert(-1);
+          setAlertText(
+            "Ran into error while fetching chats, please try reloading or try again after some time"
+          );
+          console.log(error);
+        });
+        return ;
+    }
     await fetchChatMessage({ chatId: _id })
       .then((res) => {
         setNewChat(chat);
@@ -66,21 +103,28 @@ function Messages() {
         setAlertText(
           "Ran into error while fetching chats, please try reloading or try again after some time"
         );
-        console.log(error)
+        console.log(error);
       });
   };
-  const handleChat = async (chat: any, ChatProps: any) => {
+
+  const handleChat = async (
+    chat: any,
+    ChatProps: any,
+    announcement: boolean = false
+  ) => {
     console.log(chat);
     if (Chat === undefined || ChatProps._id !== Chat._id) {
       setMessageList([]);
       setLoading(true);
-      fetchMessages(ChatProps._id, ChatProps);
+      fetchMessages(ChatProps._id, ChatProps, announcement);
       setShowProfile(false);
       socket.emit("join chat", ChatProps._id);
     }
   };
   const handlecontactList = (newChat: any) => {
     setcontactList((prev: any) => [...prev, newChat]);
+    setAlert(1);
+    setAlertText("User added successfully");
   };
   const handleMessageList = (newMessage: Message) => {
     setMessageList((prev: Message[]) => [...prev, newMessage]);
@@ -133,7 +177,7 @@ function Messages() {
                 style={{ display: "flex", flexDirection: "column", flex: 1 }}
               >
                 <Profile
-                  name={Chat.name}
+                  name={Chat.username}
                   image={Chat.profileImage}
                   handleProfile={handleProfile}
                 />

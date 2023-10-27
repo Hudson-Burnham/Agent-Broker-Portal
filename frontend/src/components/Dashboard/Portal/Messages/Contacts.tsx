@@ -1,6 +1,14 @@
-import { IconButton, LinearProgress, Typography, styled } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  IconButton,
+  LinearProgress,
+  Typography,
+  styled,
+} from "@mui/material";
 import img from "../../../../assets/profileImg.png";
-import { AddBox, KeyboardArrowDown } from "@mui/icons-material";
+import { AddBox, ExpandMore } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import CreateChat from "./CreateChat";
 import { useSelector } from "react-redux";
@@ -12,6 +20,12 @@ const ContactSection = styled("div")({
   flexDirection: "column",
   overflow: "auto",
   padding: "24px 0px",
+});
+const AccordionContainer = styled(Accordion)({
+  background: "#19171D",
+  padding: 0,
+  color: "white",
+  border: "none",
 });
 const LoadingContainer = styled("div")({
   display: "flex",
@@ -50,7 +64,8 @@ export const Img = styled("img")({
 export type Props = {
   contactList: any[];
   handlecontactList: (newChat: any) => void;
-  handleChat: (chat: any, Chat: any) => void;
+  handleChat: (chat: any, Chat: any, announcement?: boolean) => void;
+  // handleAnnouncement: () => void
 };
 function Contacts(props: Props) {
   const [loading, setLoading] = useState(true);
@@ -91,15 +106,16 @@ function Contacts(props: Props) {
     setCreateChat((prev) => !prev);
   };
   const handleUserDetails = (detail: string, chat: any) => {
+    console.log(chat);
     switch (detail) {
       case "NAME":
         return chat.users[0]._id === user._id
-          ? chat.users[1].username
-          : chat.users[0].username;
+          ? chat?.users[1]?.username
+          : chat?.users[0]?.username;
       case "IMG":
         return chat.users[0]._id === user._id
-          ? chat.users[1].profileImage
-          : chat.users[0].profileImage;
+          ? chat?.users[1]?.profileImage
+          : chat?.users[0]?.profileImage;
       default:
         return "";
     }
@@ -115,16 +131,27 @@ function Contacts(props: Props) {
           handlecontactList={props.handlecontactList}
         />
       )}
-      <div style={{ padding: "20px" }}>
+      <div style={{ padding: "20px 20px 0 20px" }}>
         <Typography variant="h5" mt={4} mb={6}>
           Messages
         </Typography>
-        <div className="flex">
-          <Typography variant="h6">Hudson Burnham</Typography>
-          <IconButton>
-            <KeyboardArrowDown style={{ color: "white" }} />
-          </IconButton>
-        </div>
+        <AccordionContainer>
+          <AccordionSummary
+            style={{ padding: 0 }}
+            expandIcon={<ExpandMore style={{ color: "white" }} />}
+          >
+            <Typography variant="h6">Hudson Burnham</Typography>
+          </AccordionSummary>
+
+          <AccordionDetails
+            style={{ padding: 0 }}
+            onClick={() => props.handleChat("", "", true)
+              // props.handleAnnouncement()
+            }
+          >
+            <Typography variant="subtitle1">Announcements</Typography>
+          </AccordionDetails>
+        </AccordionContainer>
       </div>
 
       {loading ? (
@@ -139,7 +166,6 @@ function Contacts(props: Props) {
       ) : (
         <div className="scroll-container">
           <Typography m={2}>Channels</Typography>
-         
 
           {groupChats.length > 0 && (
             <ContactList>
@@ -171,7 +197,7 @@ function Contacts(props: Props) {
               ))}
             </ContactList>
           )}
-           <div
+          <div
             style={{
               padding: "12px",
               display: "flex",
@@ -210,16 +236,16 @@ function Contacts(props: Props) {
                       variant="subtitle1"
                       className="message-contact-text"
                     >
-                      {chat.users[0]._id === user._id
-                        ? chat.users[1].username
-                        : chat.users[0].username}
+                      {chat.users[0]?._id === user?._id
+                        ? chat?.users[1]?.username
+                        : chat?.users[0]?.username}
                     </Typography>
                   </div>
                 </ContactCard>
               ))}
             </ContactList>
           )}
-           <div
+          <div
             style={{
               padding: "12px",
               display: "flex",

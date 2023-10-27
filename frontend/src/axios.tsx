@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
 axios.defaults.baseURL="https://hudsonbackend.hudsonburnham.ai/"
+// axios.defaults.baseURL="http://localhost:3000"
 axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem("access_token")))}`
 
 export async function loginRequest(data: {
@@ -107,6 +108,13 @@ export async function getLeaderboardData(): Promise<AxiosResponse<any>> {
   return await axios({
     method: 'get',
     url: `/hubspot/leaderboard`
+  })
+}
+
+export async function fetchAnnouncements(): Promise<AxiosResponse<any>> {
+  return await axios({
+    method: 'get',
+    url: '/user/announcements'
   })
 }
 
