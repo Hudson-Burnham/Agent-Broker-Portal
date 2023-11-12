@@ -42,8 +42,8 @@ function Messages() {
   const [alertText, setAlertText] = useState("");
   const [isAnnouncement, setAnnouncement] = useState(false)
   const user: User = useSelector((state: State) => state.user) as User;
-  // const socket = io("https://hudsonbackend.hudsonburnham.ai/");
-  const socket = io("http://localhost:3000");
+  const socket = io("https://hudsonbackend.hudsonburnham.ai/");
+  // const socket = io("http://localhost:3000");
   useEffect(() => {
     fetchContact();
     socket.emit("setup", user._id);
