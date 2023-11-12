@@ -53,6 +53,7 @@ const Portal = (value: string) => {
 };
 function Dashboard() {
   const user: User = useSelector((state: State) => state.user) as User;
+  const isUserLoggedIn: boolean = useSelector((state: State) => state.isUserLoggedIn)
   const dispatch = useDispatch();
   const [tab, setTab] = useState("1");
   const [loading, setLoading] = useState(true);
@@ -61,6 +62,7 @@ function Dashboard() {
     logout: false,
   });
   const navigate = useNavigate();
+  console.log("redux store: ", isUserLoggedIn)
   console.log("user details after login", user);
 
   const handleLogoutDialog = (user: boolean) => {

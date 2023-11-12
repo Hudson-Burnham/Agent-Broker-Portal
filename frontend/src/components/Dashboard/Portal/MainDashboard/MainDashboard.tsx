@@ -116,12 +116,11 @@ function MainDashboard() {
   const fetchAllAnnouncements = async () => {
     await fetchAnnouncements()
       .then((res) => setAnnouncementList(res.data))
-      .catch((error) => console.log(error));
   };
   useEffect(() => {
     fetchAllAnnouncements();
     console.log(announcementList)
-  });
+  }, []);
    const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",

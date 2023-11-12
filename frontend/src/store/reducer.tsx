@@ -18,13 +18,13 @@ function reducer(state: State = initialState, action: Action): State {
     case LOGIN:
       return {
         ...state,
-        isUserLoggedIn: !state.isUserLoggedIn,
+        isUserLoggedIn: true,
         user: action.payload
       };
     case LOGOUT: 
     return {
         ...state,
-        isUserLoggedIn: !state.isUserLoggedIn,
+        isUserLoggedIn: false,
         user: null
     }
     case SET_USER: 

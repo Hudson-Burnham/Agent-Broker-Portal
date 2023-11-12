@@ -40,9 +40,10 @@ function Messages() {
   const [showProfile, setShowProfile] = useState(false);
   const [alert, setAlert] = useState(0);
   const [alertText, setAlertText] = useState("");
+  const [isAnnouncement, setAnnouncement] = useState(false)
   const user: User = useSelector((state: State) => state.user) as User;
-  const socket = io("https://hudsonbackend.hudsonburnham.ai/");
-  // const socket = io("http://localhost:3000");
+  // const socket = io("https://hudsonbackend.hudsonburnham.ai/");
+  const socket = io("http://localhost:3000");
   useEffect(() => {
     fetchContact();
     socket.emit("setup", user._id);
@@ -62,7 +63,6 @@ function Messages() {
       if ((await message.sender._id) !== user._id) {
         setAlert(1);
         setAlertText(message.text);
-        console.log("we recevied an announcemnt", message);
       }
     });
   });
@@ -112,10 +112,12 @@ function Messages() {
     ChatProps: any,
     announcement: boolean = false
   ) => {
-    console.log(chat);
+    console.log(chat, announcement);
+    await setAnnouncement(() => announcement)
     if (Chat === undefined || ChatProps._id !== Chat._id) {
       setMessageList([]);
       setLoading(true);
+      console.log("fetch announcements: ", isAnnouncement)
       fetchMessages(ChatProps._id, ChatProps, announcement);
       setShowProfile(false);
       socket.emit("join chat", ChatProps._id);
@@ -126,9 +128,13 @@ function Messages() {
     setAlert(1);
     setAlertText("User added successfully");
   };
-  const handleMessageList = (newMessage: Message) => {
+  const handleMessageList = (newMessage: Message, isAnnouncement : boolean = false) => {
     setMessageList((prev: Message[]) => [...prev, newMessage]);
+    if(isAnnouncement) {
+      socket.emit("send announcement", newMessage)
+    } else {
     socket.emit("send message", newMessage);
+    }
   };
   const handleProfile = () => {
     setShowProfile((prev) => !prev);
@@ -139,9 +145,6 @@ function Messages() {
       .then((res) => {
         setcontactList(() => res.data);
       })
-      .catch((error) =>
-        console.log("got error while fetching contacts", error)
-      );
   };
 
   return (
@@ -185,6 +188,7 @@ function Messages() {
                   chat={Chat}
                   handleMessageList={handleMessageList}
                   messages={messageList}
+                  isAnnouncement={isAnnouncement}
                 />
               </div>
 

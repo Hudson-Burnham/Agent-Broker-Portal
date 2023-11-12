@@ -65,13 +65,11 @@ export type Props = {
   contactList: any[];
   handlecontactList: (newChat: any) => void;
   handleChat: (chat: any, Chat: any, announcement?: boolean) => void;
-  // handleAnnouncement: () => void
 };
 function Contacts(props: Props) {
   const [loading, setLoading] = useState(true);
   const [groupChats, setGroupChats] = useState<any[]>([]);
   const [directChats, setDirectChats] = useState<any[]>([]);
-  console.log("contact list check", props.contactList);
   const [createChat, setCreateChat] = useState(false);
   const user: User = useSelector((state: State) => state.user) as User;
 
@@ -146,7 +144,6 @@ function Contacts(props: Props) {
           <AccordionDetails
             style={{ padding: 0 }}
             onClick={() => props.handleChat("", "", true)
-              // props.handleAnnouncement()
             }
           >
             <Typography variant="subtitle1">Announcements</Typography>

@@ -1,8 +1,11 @@
 import axios, { AxiosResponse } from "axios";
+import { store } from "./main";
+import { LOGOUT } from "./store/types";
 
 axios.defaults.baseURL="https://hudsonbackend.hudsonburnham.ai/"
 // axios.defaults.baseURL="http://localhost:3000"
 axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem("access_token")))}`
+axios.defaults.withCredentials = true;
 
 export async function loginRequest(data: {
   email: string;
@@ -118,36 +121,39 @@ export async function fetchAnnouncements(): Promise<AxiosResponse<any>> {
   })
 }
 
+const handleLogout = () => {
+  localStorage.removeItem("access_token")
+  store.dispatch({type: LOGOUT, payload: false})
+  window.location.href="/"
+}
 
-let refresh = false
+
 axios.interceptors.response.use(
   (res) => res,
   async (error) => {
-    if (error.response.status === 403 && !refresh) {
-      refresh = true
+    if (error.response.status === 403) {
+      console.log(error.response)
       try {
         const response = await axios({
           method: "post",
           url: `auth/refresh`,
-          withCredentials: true
+          withCredentials: true,
         }) ;
-        console.log("on error , access token",localStorage.getItem("access_token"));
-        console.log("on error : beaere token",axios.defaults.headers.common["Authorization"])
-
         if (response.status < 300) {
-          refresh = true
           localStorage.setItem("access_token", response.data.accessToken);
-
           error.response.config.headers["Authorization"] = `Bearer ${response.data.accessToken}`;
-          
           return axios(error.response.config);
         }
       } catch(error) {
         //set the error banner to logout and do login once again
         console.log("hi I am error in refresh call", error)
+       handleLogout()
+        //force the user to logout or remove the access token 
       }
     }
-    refresh = false
+    if(error.response.status == 401) {
+      handleLogout();
+    }
     return Promise.reject(error);
   }
 );

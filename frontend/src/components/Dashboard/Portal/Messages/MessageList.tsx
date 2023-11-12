@@ -74,7 +74,8 @@ const IconStyle = styled(IconButton)({
 export type Props = {
   chat: Chat;
   messages: Message[];
-  handleMessageList: (message: Message) => void;
+  handleMessageList: (message: Message, announcement?: boolean) => void;
+  isAnnouncement: boolean;
 };
 function MessageList(props: Props) {
   const user: User = useSelector((state: State) => state.user) as User;
@@ -140,12 +141,17 @@ function MessageList(props: Props) {
         text: message,
         attachment: files,
       };
-      props.handleMessageList(newMessage);
-      await sendMessage(data).then((res) => {
-        if (res.status) {
-          console.log("Message Sent");
-        }
-      });
+      if(props.isAnnouncement) {
+        props.handleMessageList(newMessage, true);
+      } else {
+        props.handleMessageList(newMessage, false);
+        await sendMessage(data).then((res) => {
+          if (res.status) {
+            console.log("Message Sent");
+          }
+        });
+      }
+     
     }
   };
   return (

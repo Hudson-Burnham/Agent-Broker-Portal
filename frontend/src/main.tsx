@@ -10,7 +10,7 @@ import { Store, legacy_createStore as createStore } from "redux";
 import { Provider } from "react-redux";
 import "./axios.tsx"
 
-const store: Store<State, Action> = createStore(persistedReducer);
+export const store: Store<State, Action> = createStore(persistedReducer);
 const persistor = persistStore(store);
 
 ReactDOM.createRoot(document.getElementById("root")as HTMLElement).render(

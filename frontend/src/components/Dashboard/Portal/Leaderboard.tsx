@@ -62,7 +62,6 @@ export default function Leaderboard() {
         setDeals(res.data.deals);
         setLoading(false);
       })
-      .catch((err) => console.log(err));
   };
   useEffect(() => {
     fetchLeaderboardData();
